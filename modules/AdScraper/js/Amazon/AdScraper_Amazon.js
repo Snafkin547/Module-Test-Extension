@@ -16,10 +16,10 @@ function getBetween(str, str_a, str_b) {
  * Scraping ads at the top container
  */
 
-const sponsoredTop = document.querySelectorAll('[class="_bGlmZ_container_GMk6b sbx-desktop"]')
-if (sponsoredTop.length > 0) {
+const topAds = document.querySelectorAll('[class="_bGlmZ_container_GMk6b sbx-desktop"]')
+if (topAds.length > 0) {
 
-    sponsoredTop.forEach((e) => {
+    topAds.forEach((e) => {
 
         const sponsored_Large = e.querySelector('[aria-label^="Sponsored ad from"]')
         const sponsored_Ad = sponsored_Large.attributes
@@ -52,10 +52,10 @@ if (sponsoredTop.length > 0) {
  * Scraping ads at the bottom container
  */
 
-const sponsoredBottom = document.querySelectorAll('[class="a-section a-spacing-base a-spacing-top-base"]')
-if (sponsoredBottom.length > 0) {
+const bottomAds = document.querySelectorAll('[class="a-section a-spacing-base a-spacing-top-base"]')
+if (bottomAds.length > 0) {
 
-    sponsoredBottom.forEach((e) => {
+    bottomAds.forEach((e) => {
         const sponsored = e.querySelectorAll('[class="_bXVsd_container_3aZDQ"]')
         sponsored.forEach((e2) => {
             const img_elem = e2.querySelector('img')
@@ -68,4 +68,50 @@ if (sponsoredBottom.length > 0) {
     })
 }
 
+/*
+ * Scraping ads inside the search reult
+ * It did not contain supplier name itself, only description in title
+ */
+
+const withinSearch = document.querySelectorAll('[alt^="Sponsored Ad"]')
+withinSearch.forEach((e) => {
+    const title = e['alt']
+    console.log("[Amazon Search (within search)] Supplier and product description: " + title)
+    const imageURL = e.src
+    console.log("[Amazon Search (within search)] Image URL: " + imageURL)
+})
+
+/*
+ * Scraping a big section betweem the search reult
+ */
+
+const withVideo = document.querySelectorAll('[aria-label^="Sponsored video"]')
+withVideo.forEach((e) => {
+    const imgURL = e['href']
+    console.log("[Amazon Search (between search) Image URL: " + imgURL)
+    const videoURLs = e.querySelectorAll('video')
+    videoURLs.forEach((v) => {
+        const videopreview = v['poster']
+        const videoURL = v['src']
+        console.log("[Amazon Search (between search)] Video Preview URL: " + videopreview)
+        console.log("[Amazon Search (between search)] Video URL: " + videoURL)
+    })
+})
+
+/*
+ * Scraping vertical side ads
+ */
+
+const verticalSideAds = document.querySelectorAll('[aria-label^="Sponsored video"]')
+verticalSideAds.forEach((e) => {
+    const imgURL = e['href']
+    console.log("[Amazon Search (between search) Image URL: " + imgURL)
+    const videoURLs = e.querySelectorAll('video')
+    videoURLs.forEach((v) => {
+        const videopreview = v['poster']
+        const videoURL = v['src']
+        console.log("[Amazon Search (between search)] Video Preview URL: " + videopreview)
+        console.log("[Amazon Search (between search)] Video URL: " + videoURL)
+    })
+})
 

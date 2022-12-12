@@ -126,5 +126,16 @@ window.registerModuleCallback(function (config) {
     })
   }
   // }
+  /*
+ * Scraping ads inside the search reult
+ */
+
+  const sponsored = document.querySelectorAll('[alt^="Sponsored Ad"]')
+  sponsored.forEach((e) => {
+    const title = e['alt']
+    console.log("[Amazon Search (within search)] Supplier and product description: " + title)
+    const imageURL = e.src
+    console.log("[Amazon Search (within search)] Image URL: " + imageURL)
+  })
 })
 
