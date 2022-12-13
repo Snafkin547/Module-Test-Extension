@@ -1,4 +1,5 @@
-# AdScraper (This README is temp and should be deleted before merging)
+# AdScraper 
+### (This README is temp and should be deleted before merging)
 
 ## Overview
 This module scrapes advertisements appering in Google Search and Amazon Search, both with and without image components.
