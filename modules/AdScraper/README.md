@@ -35,7 +35,8 @@ This whole respository acts as a harness to ship the codde out to be readily usa
 <li> Scraping Products related to this search
 <li> Scraping horizontal banner at the bottom
 
-<li> Send collected data to the backend
+<li> Send collected data to the background worker
+<li> Build the background worker to send the data to the DB
 
 <li> Test
  
