@@ -27,7 +27,8 @@ This whole respository acts as a harness to ship the codde out to be readily usa
 
 3) At the root directory, run `python3 package_chrome.py` and unzip a produced file (chrome-extension.zip) in the root directory
 
-4) Upload the unzipped folder 
+4) Upload the unzipped folder by opening "chrome://extensions/" or following the steps below:
+
 <ul>
 
 <Step1>
