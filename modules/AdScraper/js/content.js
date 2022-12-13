@@ -35,9 +35,11 @@ window.registerModuleCallback(function (config) {
           console.log("[Google Search] Header/Supplier: " + supplier)
           const productURL = header?.href
           console.log("[Google Search] Product URL: " + productURL)
+
           chrome.runtime.sendMessage({
-            content: 'Google_ads',
+            content: 'record_Ads',
             url: window.location.href,
+            pageTitle: document.title,
             supplier: supplier,
             productURL: productURL,
             imgURL: '',
@@ -79,9 +81,11 @@ window.registerModuleCallback(function (config) {
           console.log("[Google Search] Image width: " + imageWidth)
           const productURL = al.querySelector('[class="plantl pla-unit-title-link"]')?.href
           console.log("[Google Search] Product URL: " + productURL)
+
           chrome.runtime.sendMessage({
-            content: 'Google_ads',
+            content: 'record_Ads',
             url: window.location.href,
+            pageTitle: document.title,
             supplier: supplier,
             productURL: productURL,
             imgURL: imageURL,
@@ -124,8 +128,9 @@ window.registerModuleCallback(function (config) {
       console.log("[Amazon Search (Top)] Image Size: " + imageSize)
 
       chrome.runtime.sendMessage({
-        content: 'Google_ads',
+        content: 'record_Ads',
         url: window.location.href,
+        pageTitle: document.title,
         supplier: supplier,
         productURL: '',
         imgURL: imageURL,
@@ -147,8 +152,9 @@ window.registerModuleCallback(function (config) {
         console.log("[Amazon Search (Top)] Image Size: " + imageSize)
 
         chrome.runtime.sendMessage({
-          content: 'Google_ads',
+          content: 'record_Ads',
           url: window.location.href,
+          pageTitle: document.title,
           supplier: supplier,
           productURL: '',
           imgURL: imageURL,
@@ -182,8 +188,9 @@ window.registerModuleCallback(function (config) {
         console.log("[Amazon Search (Bottom)] Image URL: " + imageURL)
 
         chrome.runtime.sendMessage({
-          content: 'Google_ads',
+          content: 'record_Ads',
           url: window.location.href,
+          pageTitle: document.title,
           supplier: supplier,
           productURL: '',
           imgURL: imageURL,
@@ -212,8 +219,9 @@ window.registerModuleCallback(function (config) {
     console.log("[Amazon Search (within search)] Image URL: " + imageURL)
 
     chrome.runtime.sendMessage({
-      content: 'Google_ads',
+      content: 'record_Ads',
       url: window.location.href,
+      pageTitle: document.title,
       supplier: '',
       productURL: '',
       imgURL: imageURL,
@@ -243,8 +251,9 @@ window.registerModuleCallback(function (config) {
       console.log("[Amazon Search (between search)] Video URL: " + videoURL)
 
       chrome.runtime.sendMessage({
-        content: 'Google_ads',
+        content: 'record_Ads',
         url: window.location.href,
+        pageTitle: document.title,
         supplier: '',
         productURL: '',
         imgURL: imageURL,
@@ -271,8 +280,9 @@ window.registerModuleCallback(function (config) {
     const imageURL = img['src']
     console.log("[Amazon Search (vertical) Image URL: " + imageURL)
     chrome.runtime.sendMessage({
-      content: 'Google_ads',
+      content: 'record_Ads',
       url: window.location.href,
+      pageTitle: document.title,
       supplier: '',
       productURL: '',
       imgURL: imageURL,
