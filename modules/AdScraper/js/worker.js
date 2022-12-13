@@ -1,20 +1,40 @@
-/* global registerCustomModule */
-
-chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-        if (request.generator === 'Ad-Scraper') {
-            console.log('[Ad Scraper] Recording HTML Elements.')
-            console.log("You are seeing html of " + request.payload.url)
-            const html = request.payload.html
-            console.log("HTML: " + html)
-            const ads = request.payload.ads
-            var htmlObject = $(ads); // jquery call
-            console.log("We found ads " + htmlObject)
-        }
-    }
-);
+/* global chrome, handleMessage, registerCustomModule, registerMessageHandler */
 const recordHTML = function (request, sender, sendResponse) {
+    console.log('[Ad Scraper] Recording Ads for ' + request.url + '...')
 
+    if (request.content === 'record_Ads') {
+        const payload = {
+            'url*': request.url,
+            'page-title*': request.pageTitle,
+            Ads: []
+        }
+
+        chrome.Ads.getAll({
+            url: request.url
+        },
+            function (Ads) {
+                Ads.forEach(function (ad) {
+                    console.log(ad.name + ' --> ' + ad.name)
+                    console.log(ad)
+
+                    payload.Ads.push(ad)
+                })
+
+                if (payload.Ads.length > 0) {
+                    const newRequest = {
+                        content: 'record_data_point',
+                        generator: 'browser-Ads',
+                        payload: payload // eslint-disable-line object-shorthand
+                    }
+
+                    handleMessage(newRequest, sender, sendResponse)
+                }
+            })
+
+        return true
+    }
+
+    return false
 }
 
 

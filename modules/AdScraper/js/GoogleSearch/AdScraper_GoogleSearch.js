@@ -44,8 +44,6 @@ if (adsContainer.length > 0) {
                 console.log("[Google Search] Image height: " + imageHeight)
                 const imageWidth = image.width
                 console.log("[Google Search] Image width: " + imageWidth)
-                const imagePosX = image.offsetLeft //TODO FIXME: This isn't fetching the actual position of the image relative to the browser
-                console.log("[Google Search] Image X-coordinate: " + imagePosX)
                 const productURL = al.querySelector('[class="plantl pla-unit-title-link"]')?.href
                 console.log("[Google Search] Product URL: " + productURL)
             })

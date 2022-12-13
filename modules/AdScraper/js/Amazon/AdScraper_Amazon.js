@@ -83,6 +83,7 @@ withinSearch.forEach((e) => {
 
 /*
  * Scraping a big section betweem the search reult
+ * It did not contain supplier name itself, only description in title
  */
 
 const withVideo = document.querySelectorAll('[aria-label^="Sponsored video"]')
@@ -100,18 +101,30 @@ withVideo.forEach((e) => {
 
 /*
  * Scraping vertical side ads
+ * No name of products/supplier and image sizes found
  */
 
-const verticalSideAds = document.querySelectorAll('[aria-label^="Sponsored video"]')
+const verticalSideAds = document.querySelectorAll('[aria-label="Sponsored Ad"]')
+console.log(verticalSideAds)
 verticalSideAds.forEach((e) => {
-    const imgURL = e['href']
-    console.log("[Amazon Search (between search) Image URL: " + imgURL)
-    const videoURLs = e.querySelectorAll('video')
-    videoURLs.forEach((v) => {
-        const videopreview = v['poster']
-        const videoURL = v['src']
-        console.log("[Amazon Search (between search)] Video Preview URL: " + videopreview)
-        console.log("[Amazon Search (between search)] Video URL: " + videoURL)
-    })
+    const img = e['img']
+    const imgURL = img['src']
+    console.log("[Amazon Search (vertical) Image URL: " + imgURL)
 })
+
+/*
+ * Scraping Recommended based on your browsing history (WIP)
+ * Product Name/Supplier Name/Image URL/Image Size/Image position(x, y)
+ * 
+ */
+
+/*
+ * Scraping Products related to this search (WIP)
+ * 
+ */
+
+/*
+ * Scraping horizontal banner at the bottom (WIP)
+ * 
+ */
 
