@@ -25,7 +25,7 @@ This whole respository acts as a harness to ship the codde out to be readily usa
 
 2) Put sender code (which sends collected data to the DB) in <a href="https://github.com/Snafkin547/Module-Test-Extension/blob/AD_scraper/modules/AdScraper/js/worker.js">worker.js </a>
 
-3) At the root directory, run `python package_chrome.py` and unzip a produced file (chrome-extension.zip) in the root directory
+3) At the root directory, run `python3 package_chrome.py` and unzip a produced file (chrome-extension.zip) in the root directory
 
 4) Upload the unzipped folder 
 <ul>
