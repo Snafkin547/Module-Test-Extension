@@ -5,7 +5,7 @@
 This module scrapes advertisements appering in Google Search and Amazon Search, both with and without image components.
 It scrapes Product Name, Supplier Name, Image URL and Image Size, while it is currently not scraping the Image position(x, y).
 
-## Big Picture
+## Workflow
 
 This whole respository acts as a harness to ship the codde out to be readily usable as an extension.
 
