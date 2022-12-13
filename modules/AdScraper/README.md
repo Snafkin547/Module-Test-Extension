@@ -5,6 +5,18 @@
 This module scrapes advertisements appering in Google Search and Amazon Search, both with and without image components.
 It scrapes Product Name, Supplier Name, Image URL and Image Size, while it is currently not scraping the Image position(x, y).
 
+## Getting Started
+1) Clone this repository:
+<pre>
+git clone https://github.com/Snafkin547/Module-Test-Extension.git
+</pre>
+
+2) Update submodules (cookies and screenshot)
+<pre>
+git submodule update --init --recursive
+</pre>
+
+
 ## Workflow
 
 This whole respository acts as a harness to ship the codde out to be readily usable as an extension.
