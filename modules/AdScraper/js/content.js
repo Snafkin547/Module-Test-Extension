@@ -31,7 +31,7 @@ window.registerModuleCallback(function (config) {
         headerList.forEach((header) => {
           // console.log(header)
           const adsDescription = header.querySelector('[class="CCgQ5 vCa9Yd QfkTvb MUxGbd v0nnCb"]')
-          const supplier = adsDescription.querySelector("span")?.innerText
+          const supplier = adsDescription?.querySelector("span")?.innerText
           console.log("[Google Search] Header/Supplier: " + supplier)
           const productURL = header?.href
           console.log("[Google Search] Product URL: " + productURL)
@@ -225,7 +225,7 @@ window.registerModuleCallback(function (config) {
       supplier: '',
       productURL: '',
       imgURL: imageURL,
-      adsDescription: '',
+      adsDescription: adsDescription,
       imageHeight: '',
       imageWidth: '',
       imageSize: '',
