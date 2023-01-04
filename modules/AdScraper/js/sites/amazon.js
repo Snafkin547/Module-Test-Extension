@@ -11,12 +11,30 @@ function onloadScraper() {
  * scraping recommended based on browsing history at the bottom (rhf-frame)
  */
 function rhfScraper() {
+  // For each search, the rhf-frame will only be loaded once when user scroll down
+  // Clear the set when rhf-frame is changed to visible
+  // Add items from the list to the set as user going through each pages
+  // If item is already in the list, it won't be loaded
+  const carouselSet = new Set(); // set for recording sent items
+
   let bottomFrame = document.querySelector(".rhf-frame");
   console.log("RHF FRAME");
   console.log(bottomFrame);
 
+  // util functions for sending ads message to PDK and store it in the Set
+  const sendMsgAndAddToSet = (node) => {
+    const asin = asinScraperFromUrl(node.querySelector("a")["href"]);
+    if (carouselSet.has(asin)) {
+      return;
+    }
+
+    carouselSet.add(asin);
+    console.log(asin);
+    // TODO: add content
+  };
+
+  // define observer for monitoring the carousel list, fires when user move to another page
   const observerCarousel = new MutationObserver(() => {
-    console.log("CAROUSEL OBSERVER TRIGGERED");
     setTimeout(() => {
       const carouselList = document
         .querySelector(".rhf-frame")
@@ -27,14 +45,19 @@ function rhfScraper() {
         carouselList.getAttribute("aria-busy") === "false"
       ) {
         console.log("LIST LOADED");
-        console.log(carouselList.querySelectorAll("li"));
+        const carouselItems = carouselList.querySelectorAll("li");
+        for (const item of carouselItems) {
+          sendMsgAndAddToSet(item);
+        }
       }
     }, 1000);
   });
 
   let bottomFrameDetected = false;
+  // define observer for monitoring the attribute change of the bottom rhf-frame
   const observerBottomFrame = new MutationObserver(() => {
-    console.log("OBSERVER TRIGGERED");
+    // clear the carousel list set
+    carouselSet.clear();
     setTimeout(() => {
       const sponsoredTag = bottomFrame.querySelector(
         "._sp-rhf-desktop-carousel_style_spSponsored__RRHY_"
@@ -45,10 +68,17 @@ function rhfScraper() {
         if (sponsoredTag) {
           console.log("HAS SPONSORED LIST");
           if (!bottomFrame.querySelector("ol").getAttribute("aria-busy")) {
-            console.log(bottomFrame.querySelector("ol").querySelectorAll("li"));
+            const carouselItems = bottomFrame
+              .querySelector("ol")
+              .querySelectorAll("li");
+            console.log(carouselItems);
+            for (const item of carouselItems) {
+              sendMsgAndAddToSet(item);
+            }
           }
           observerCarousel.observe(bottomFrame.querySelector("ol"), {
             attributes: true,
+            attributeOldValue: true,
           });
         }
       }
@@ -58,6 +88,7 @@ function rhfScraper() {
   observerBottomFrame.observe(bottomFrame, {
     attributes: true,
     attributeFilter: ["style"],
+    attributeOldValue: true,
   });
 }
 
@@ -96,4 +127,13 @@ function horizontalBannerScraper() {
       chrome.runtime.sendMessage(bannerAds);
     }
   }
+}
+
+// helper functions
+function asinScraperFromUrl(url) {
+  const regex = RegExp(
+    "(http|https)://www.amazon..*(%2Fdp%2F|/dp/)([A-Z0-9]{10})"
+  );
+
+  return url.match(regex)[3];
 }
