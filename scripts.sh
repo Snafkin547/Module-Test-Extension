@@ -30,6 +30,7 @@ then
     rm -R chrome*
 
     build_extension
+    
 elif [[ $1 == "--help" ]]
 then
     echo "${WHSPACE}${YELLOW}--build:${NC} Generate the chrome extension and unpack"
