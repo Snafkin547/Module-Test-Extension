@@ -1,13 +1,11 @@
 {
-  "name": "Ad Scraper", 
-  "service_worker_scripts": [
-    "js/worker.js"
-  ], 
+  "name": "Ad Scraper",
+  "service_worker_scripts": ["js/worker.js"],
   "content_scripts": [
-    "js/content.js"
-  ], 
-  "permissions": [
+    "js/content.js",
+    "js/sites/amazon.js",
+    "js/sites/google.js"
   ],
-  "host_permissions": [
-  ]
+  "permissions": [],
+  "host_permissions": []
 }
