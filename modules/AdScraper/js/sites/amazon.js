@@ -100,6 +100,12 @@ function horizontalBannerScraper() {
   console.log(`NODE LENGTH: ${horizontalBanners.length}`);
   if (horizontalBanners.length > 0) {
     for (const banner of horizontalBanners) {
+      const pricing = banner.querySelector(
+        ".a-size-base.a-link-normal.s-underline-text.s-underline-link-text"
+      );
+
+      const currentPrice = pricing.querySelector(".a-price:not(.a-text-price)");
+      const originalPrice = pricing.querySelector(".a-price.a-text-price");
       const img = banner.querySelector("img");
       const imgURL = img["src"];
       const video = banner.closest(".sg-row").querySelector("video");
@@ -115,6 +121,20 @@ function horizontalBannerScraper() {
         pageTitle: document.title,
         supplier: "",
         productURL,
+        currentPrice: currentPrice
+          ? Number(
+              currentPrice
+                .querySelector(".a-offscreen")
+                .textContent.replace("$", "")
+            )
+          : null,
+        originalPrice: originalPrice
+          ? Number(
+              originalPrice
+                .querySelector(".a-offscreen")
+                .textContent.replace("$", "")
+            )
+          : null,
         imgURL,
         adsDescription,
         imageHeight: img.height,
