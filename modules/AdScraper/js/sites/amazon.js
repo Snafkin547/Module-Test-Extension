@@ -1,3 +1,4 @@
+window.registerModuleCallback(searchResultScraper);
 window.registerModuleCallback(onloadScraper);
 
 function onloadScraper() {
@@ -5,6 +6,48 @@ function onloadScraper() {
     rhfScraper();
     horizontalBannerScraper();
   };
+}
+/**
+ * Scraping ads inside the search result
+ */
+function searchResultScraper() {
+  // It did not contain supplier name itself, only description in title
+  const searchResultCollection = new Set();
+
+  const resultList = document.querySelectorAll('[alt^="Sponsored Ad"]');
+  for (const resultImage of resultList) {
+    let item = resultImage.closest(".s-result-item");
+
+    const asin = item.getAttribute("data-asin");
+    const currentPrice = extractCurrentPrice(item);
+    const originalPrice = extractOriginalPrice(item);
+    const imgURL = resultImage["src"];
+    const productURL = item.querySelector("a.a-link-normal")["href"];
+    const adsDescription = item.querySelector(
+      "span.a-color-base.a-text-normal"
+    ).textContent;
+
+    const resultAds = {
+      asin,
+      content: "record_Ads",
+      url: window.location.href,
+      pageTitle: document.title,
+      supplier: null,
+      productURL,
+      currentPrice,
+      originalPrice,
+      imgURL,
+      imgBASE64: null,
+      adsDescription,
+      imageHeight: resultImage.height,
+      imageWidth: resultImage.width,
+      imageSize: null,
+      videoPreview: null,
+      videoURL: null,
+    };
+
+    detectDuplicateAndSendMsg(searchResultCollection, resultAds);
+  }
 }
 
 /**
