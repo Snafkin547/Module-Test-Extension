@@ -1,3 +1,4 @@
+window.registerModuleCallback(bottomBannerScraper);
 window.registerModuleCallback(searchResultScraper);
 window.registerModuleCallback(onloadScraper);
 
@@ -7,6 +8,51 @@ function onloadScraper() {
     horizontalBannerScraper();
   };
 }
+/*
+ * Scraping ads at the bottom container
+ */
+function bottomBannerScraper() {
+  const bottomBanners = document.querySelectorAll(".s-widget.AdHolder");
+  for (const banner of bottomBanners) {
+    items = banner.querySelectorAll("._bXVsd_container_3aZDQ");
+    if (!items) return;
+
+    for (const item of items) {
+      const img = item.querySelector("img");
+      const imgURL = img["src"];
+      const supplier = img["alt"].substring(
+        img["alt"].indexOf("from") + 5,
+        img["alt"].indexOf(".")
+      );
+      const productURL = item.querySelector("a")["href"];
+      const adsDescription = item.querySelector(
+        "span.a-truncate-full"
+      ).textContent;
+
+      const bannerAds = {
+        asin: null,
+        content: "records_Ads",
+        url: window.location.href,
+        pageTitle: document.title,
+        supplier,
+        productURL,
+        currentPrice: null,
+        originalPrice: null,
+        imgURL,
+        imgBASE64: null,
+        adsDescription,
+        imageHeight: img.height,
+        imageWidth: img.width,
+        imageSize: null,
+        videoPreview: null,
+        videoURL: null,
+      };
+
+      detectDuplicateAndSendMsg(null, bannerAds);
+    }
+  }
+}
+
 /**
  * Scraping ads inside the search result
  */
@@ -14,8 +60,8 @@ function searchResultScraper() {
   // It did not contain supplier name itself, only description in title
   const searchResultCollection = new Set();
 
-  const resultList = document.querySelectorAll('[alt^="Sponsored Ad"]');
-  for (const resultImage of resultList) {
+  const searchResults = document.querySelectorAll('[alt^="Sponsored Ad"]');
+  for (const resultImage of searchResults) {
     let item = resultImage.closest(".s-result-item");
 
     const asin = item.getAttribute("data-asin");
@@ -183,9 +229,12 @@ function horizontalBannerScraper() {
 
 // helper functions
 function detectDuplicateAndSendMsg(collection, item) {
-  if (collection.has(item.asin)) return;
+  if (collection) {
+    if (collection.has(item.asin)) return;
 
-  collection.add(item.asin);
+    collection.add(item.asin);
+  }
+
   console.log(item);
   // chrome.runtime.sendMessage(bannerAds);
 }
