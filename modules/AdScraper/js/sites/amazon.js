@@ -23,7 +23,7 @@ function rhfScraper() {
 
   // util functions for sending ads message to PDK and store it in the Set
   const sendMsgAndAddToSet = (node) => {
-    const asin = asinScraperFromUrl(node.querySelector("a")["href"]);
+    const asin = extractAsinFromUrl(node.querySelector("a")["href"]);
     if (carouselSet.has(asin)) {
       return;
     }
@@ -100,42 +100,29 @@ function horizontalBannerScraper() {
   console.log(`NODE LENGTH: ${horizontalBanners.length}`);
   if (horizontalBanners.length > 0) {
     for (const banner of horizontalBanners) {
-      const pricing = banner.querySelector(
-        ".a-size-base.a-link-normal.s-underline-text.s-underline-link-text"
-      );
-
-      const currentPrice = pricing.querySelector(".a-price:not(.a-text-price)");
-      const originalPrice = pricing.querySelector(".a-price.a-text-price");
+      const asin = extractAsinFromUrl(banner.querySelector("a")["href"]);
+      const currentPrice = extractCurrentPrice(banner);
+      const originalPrice = extractOriginalPrice(banner);
       const img = banner.querySelector("img");
       const imgURL = img["src"];
       const video = banner.closest(".sg-row").querySelector("video");
       const videoURL = video["src"];
       const videoPreview = video["poster"];
-      const productURL = banner.querySelector(".a-link-normal")["href"];
+      const productURL = banner.querySelector("a.a-link-normal")["href"];
       const adsDescription =
         banner.querySelector("span.a-text-normal").textContent;
 
       const bannerAds = {
+        asin,
         content: "records_Ads",
         url: window.location.href,
         pageTitle: document.title,
         supplier: "",
         productURL,
-        currentPrice: currentPrice
-          ? Number(
-              currentPrice
-                .querySelector(".a-offscreen")
-                .textContent.replace("$", "")
-            )
-          : null,
-        originalPrice: originalPrice
-          ? Number(
-              originalPrice
-                .querySelector(".a-offscreen")
-                .textContent.replace("$", "")
-            )
-          : null,
+        currentPrice,
+        originalPrice,
         imgURL,
+        imgBASE64: null,
         adsDescription,
         imageHeight: img.height,
         imageWidth: img.width,
@@ -150,10 +137,38 @@ function horizontalBannerScraper() {
 }
 
 // helper functions
-function asinScraperFromUrl(url) {
+function extractAsinFromUrl(url) {
   const regex = RegExp(
     "(http|https)://www.amazon..*(%2Fdp%2F|/dp/)([A-Z0-9]{10})"
   );
 
   return url.match(regex)[3];
+}
+
+function extractCurrentPrice(node) {
+  const currentPrice = node
+    .querySelector(
+      ".a-size-base.a-link-normal.s-underline-text.s-underline-link-text"
+    )
+    .querySelector(".a-price:not(.a-text-price)");
+
+  return currentPrice
+    ? Number(
+        currentPrice.querySelector(".a-offscreen").textContent.replace("$", "")
+      )
+    : null;
+}
+
+function extractOriginalPrice(node) {
+  const originalPrice = node
+    .querySelector(
+      ".a-size-base.a-link-normal.s-underline-text.s-underline-link-text"
+    )
+    .querySelector(".a-price:not(.a-text-price)");
+
+  return originalPrice
+    ? Number(
+        originalPrice.querySelector(".a-offscreen").textContent.replace("$", "")
+      )
+    : null;
 }
