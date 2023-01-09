@@ -96,6 +96,8 @@ function rhfScraper() {
  * scraping horizontal banners in the middle or at the bottom
  */
 function horizontalBannerScraper() {
+  const horizontalBannerCollection = new Set();
+
   const horizontalBanners = document.querySelectorAll(".sbv-product");
   console.log(`NODE LENGTH: ${horizontalBanners.length}`);
   if (horizontalBanners.length > 0) {
@@ -117,7 +119,7 @@ function horizontalBannerScraper() {
         content: "records_Ads",
         url: window.location.href,
         pageTitle: document.title,
-        supplier: "",
+        supplier: null,
         productURL,
         currentPrice,
         originalPrice,
@@ -126,17 +128,25 @@ function horizontalBannerScraper() {
         adsDescription,
         imageHeight: img.height,
         imageWidth: img.width,
-        imageSize: "",
+        imageSize: null,
         videoPreview,
         videoURL,
       };
-      console.log(bannerAds);
-      chrome.runtime.sendMessage(bannerAds);
+
+      detectDuplicateAndSendMsg(horizontalBannerCollection, bannerAds);
     }
   }
 }
 
 // helper functions
+function detectDuplicateAndSendMsg(collection, item) {
+  if (collection.has(item.asin)) return;
+
+  collection.add(item.asin);
+  console.log(item);
+  // chrome.runtime.sendMessage(bannerAds);
+}
+
 function extractAsinFromUrl(url) {
   const regex = RegExp(
     "(http|https)://www.amazon..*(%2Fdp%2F|/dp/)([A-Z0-9]{10})"
@@ -146,29 +156,41 @@ function extractAsinFromUrl(url) {
 }
 
 function extractCurrentPrice(node) {
-  const currentPrice = node
-    .querySelector(
-      ".a-size-base.a-link-normal.s-underline-text.s-underline-link-text"
-    )
-    .querySelector(".a-price:not(.a-text-price)");
-
-  return currentPrice
-    ? Number(
-        currentPrice.querySelector(".a-offscreen").textContent.replace("$", "")
+  try {
+    const currentPrice = node
+      .querySelector(
+        ".a-size-base.a-link-normal.s-underline-text.s-underline-link-text"
       )
-    : null;
+      .querySelector(".a-price:not(.a-text-price)");
+
+    return currentPrice
+      ? Number(
+          currentPrice
+            .querySelector(".a-offscreen")
+            .textContent.replace("$", "")
+        )
+      : null;
+  } catch (error) {
+    return null;
+  }
 }
 
 function extractOriginalPrice(node) {
-  const originalPrice = node
-    .querySelector(
-      ".a-size-base.a-link-normal.s-underline-text.s-underline-link-text"
-    )
-    .querySelector(".a-price:not(.a-text-price)");
-
-  return originalPrice
-    ? Number(
-        originalPrice.querySelector(".a-offscreen").textContent.replace("$", "")
+  try {
+    const originalPrice = node
+      .querySelector(
+        ".a-size-base.a-link-normal.s-underline-text.s-underline-link-text"
       )
-    : null;
+      .querySelector(".a-price:not(.a-text-price)");
+
+    return originalPrice
+      ? Number(
+          originalPrice
+            .querySelector(".a-offscreen")
+            .textContent.replace("$", "")
+        )
+      : null;
+  } catch (error) {
+    return null;
+  }
 }
