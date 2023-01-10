@@ -2,6 +2,9 @@ window.registerModuleCallback(amazonScraper);
 
 function amazonScraper() {
   window.onload = function () {
+    topBannerScraper();
+    bottomBannerScraper();
+    searchResultScraper();
     rhfScraper();
     horizontalBannerScraper();
   };
