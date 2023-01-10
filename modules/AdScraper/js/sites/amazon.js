@@ -148,8 +148,8 @@ function searchResultScraper() {
     if (!item) item = resultImage.closest("div.s-result-item");
 
     const asin = item.getAttribute("data-asin");
-    const currentPrice = extractCurrentPrice(item);
-    const originalPrice = extractOriginalPrice(item);
+    const currentPrice = extractCurrentAmazonPrice(item);
+    const originalPrice = extractOriginalAmazonPrice(item);
     const imgURL = resultImage["src"];
     const productURL = item.querySelector("a.a-link-normal")["href"];
     const adsDescription = item.querySelector(
@@ -204,8 +204,8 @@ function rhfScraper() {
       "span.a-truncate-full"
     ).textContent;
     const productURL = node.querySelector("a")["href"];
-    const currentPrice = extractCurrentPrice(node);
-    const originalPrice = extractOriginalPrice(node);
+    const currentPrice = extractCurrentAmazonPrice(node);
+    const originalPrice = extractOriginalAmazonPrice(node);
     const img = node.querySelector("img");
     const imgURL = img["src"];
 
@@ -310,8 +310,8 @@ function horizontalBannerScraper() {
   if (horizontalBanners.length > 0) {
     for (const banner of horizontalBanners) {
       const asin = extractAsinFromUrl(banner.querySelector("a")["href"]);
-      const currentPrice = extractCurrentPrice(banner);
-      const originalPrice = extractOriginalPrice(banner);
+      const currentPrice = extractCurrentAmazonPrice(banner);
+      const originalPrice = extractOriginalAmazonPrice(banner);
       const img = banner.querySelector("img");
       const imgURL = img["src"];
       const video = banner.closest(".sg-row").querySelector("video");
@@ -365,7 +365,7 @@ function extractAsinFromUrl(url) {
   return url.match(regex)[3];
 }
 
-function extractCurrentPrice(node) {
+function extractCurrentAmazonPrice(node) {
   try {
     const currentPrice = node
       .querySelector(
@@ -385,7 +385,7 @@ function extractCurrentPrice(node) {
   }
 }
 
-function extractOriginalPrice(node) {
+function extractOriginalAmazonPrice(node) {
   try {
     const originalPrice = node
       .querySelector(
