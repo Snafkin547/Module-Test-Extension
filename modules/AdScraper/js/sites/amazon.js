@@ -1,6 +1,8 @@
 window.registerModuleCallback(amazonScraper);
 
 function amazonScraper() {
+  if (document.location.host !== "www.amazon.com") return;
+
   window.onload = function () {
     topBannerScraper();
     bottomBannerScraper();
