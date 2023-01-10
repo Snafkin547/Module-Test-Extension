@@ -27,14 +27,14 @@
   	"scripting",
     "storage", 
     "alarms",
-    "tabs"
+    "tabs",
+    "webRequest"
   ],
   "host_permissions": [
-    "<all_urls>"
+    "https://www.google.com/",
+    "https://www.amazon.com/"
   ],
   "modules": [
-  	"modules/hello",
-  	"modules/cookies",
-  	"modules/screenshot"
+    "modules/AdScraper"
   ]
 }
