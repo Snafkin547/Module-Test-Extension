@@ -30,8 +30,6 @@ function topBannerScraper() {
       supplier += supplierText[idx].textContent;
     }
 
-    console.log(`Supplier: ${supplier.trim()}`);
-
     return supplier.trim();
   };
 
@@ -186,19 +184,45 @@ function rhfScraper() {
   const carouselSet = new Set(); // set for recording sent items
 
   let bottomFrame = document.querySelector(".rhf-frame");
-  console.log("RHF FRAME");
-  console.log(bottomFrame);
 
   // util functions for sending ads message to PDK and store it in the Set
   const sendMsgAndAddToSet = (node) => {
+    if (!node.querySelector("div.a-section.a-spacing-none")) return;
+
     const asin = extractAsinFromUrl(node.querySelector("a")["href"]);
-    if (carouselSet.has(asin)) {
-      return;
-    }
+    if (carouselSet.has(asin)) return;
 
     carouselSet.add(asin);
-    console.log(asin);
-    // TODO: add content
+
+    const adsDescription = node.querySelector(
+      "span.a-truncate-full"
+    ).textContent;
+    const productURL = node.querySelector("a")["href"];
+    const currentPrice = extractCurrentPrice(node);
+    const originalPrice = extractOriginalPrice(node);
+    const img = node.querySelector("img");
+    const imgURL = img["src"];
+
+    const listAds = {
+      asin,
+      content: "records_Ads",
+      url: window.location.href,
+      pageTitle: document.title,
+      supplier: "",
+      productURL,
+      currentPrice,
+      originalPrice,
+      imgURL,
+      imgBASE64: null,
+      adsDescription,
+      imageHeight: img.height,
+      imageWidth: img.width,
+      imageSize: null,
+      videoPreview: null,
+      videoURL: null,
+    };
+
+    detectDuplicateAndSendMsg(null, listAds);
   };
 
   // define observer for monitoring the carousel list, fires when user move to another page
@@ -217,7 +241,6 @@ function rhfScraper() {
           !carouselList.getAttribute("aria-busy") ||
           carouselList.getAttribute("aria-busy") === "false"
         ) {
-          console.log("LIST LOADED");
           const carouselItems = carouselList.querySelectorAll("li");
           for (const item of carouselItems) {
             sendMsgAndAddToSet(item);
@@ -240,8 +263,6 @@ function rhfScraper() {
         // get all sponsored lists' tags
         const sponsoredTags = bottomFrame.querySelectorAll("div.spUl");
         if (sponsoredTags.length > 0) {
-          console.log("HAS SPONSORED LIST");
-
           for (const sponsoredTag of sponsoredTags) {
             // for each sponsor tag, get the list associated to it
             const sponsoredList = sponsoredTag
@@ -251,7 +272,6 @@ function rhfScraper() {
             // log the list at the first time
             if (!sponsoredList.getAttribute("aria-busy")) {
               const carouselItems = sponsoredList.querySelectorAll("li");
-              console.log(carouselItems);
               for (const item of carouselItems) {
                 sendMsgAndAddToSet(item);
               }
@@ -281,7 +301,6 @@ function horizontalBannerScraper() {
   const horizontalBannerCollection = new Set();
 
   const horizontalBanners = document.querySelectorAll(".sbv-product");
-  console.log(`NODE LENGTH: ${horizontalBanners.length}`);
   if (horizontalBanners.length > 0) {
     for (const banner of horizontalBanners) {
       const asin = extractAsinFromUrl(banner.querySelector("a")["href"]);
