@@ -3,7 +3,8 @@
   "service_worker_scripts": ["js/worker.js"],
   "content_scripts": [
     "js/content.js",
-    "js/sites/amazon.js, 'js/sites/google.js'"
+    "js/sites/amazon.js",
+    "js/sites/google.js"
   ],
   "permissions": [],
   "host_permissions": []
