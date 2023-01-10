@@ -18,57 +18,71 @@ function topBannerScraper() {
     const supplierText = node
       .querySelector("a.a-size-small")
       .querySelector("span.a-truncate-full")
-      .querySelectorAll("span")[1].textContent;
+      .querySelectorAll("span");
 
-    console.log(
-      `Supplier: ${supplierText.substring(0, supplierText.length - 1)}`
-    );
+    let supplier = "";
+    for (let idx = 0; idx < supplierText.length; idx++) {
+      if (idx == 0) {
+        supplier += supplierText[idx].textContent.replace("Shop", "");
+        continue;
+      }
 
-    return supplierText.substring(0, supplierText.length - 1);
+      supplier += supplierText[idx].textContent;
+    }
+
+    console.log(`Supplier: ${supplier.trim()}`);
+
+    return supplier.trim();
   };
 
   const topBanner = document.querySelector(".s-widget.AdHolder");
-  let items = topBanner.querySelectorAll("._bGlmZ_item_awNhH");
-  let supplier = null;
+  if (!topBanner) return;
 
-  if (items.length <= 0) {
-    items = topBanner.querySelectorAll("._bXVsd_gridColumn_2Jfab");
-    supplier = supplierScraper(topBanner);
-  } else {
-    supplier = supplierScraper(topBanner);
-  }
+  try {
+    let items = topBanner.querySelectorAll("._bGlmZ_item_awNhH");
+    let supplier = null;
 
-  for (const item of items) {
-    const asin = item
-      .querySelector("div.a-section.a-spacing-none")
-      .getAttribute("data-asin");
-    const img = item.querySelector("img");
-    const imgURL = img["src"];
-    const productURL = item.querySelector("a")["href"];
-    const adsDescription = item.querySelector(
-      "span.a-truncate-full"
-    ).textContent;
+    if (items.length <= 0) {
+      items = topBanner.querySelectorAll("._bXVsd_gridColumn_2Jfab");
+      supplier = supplierScraper(topBanner);
+    } else {
+      supplier = supplierScraper(topBanner);
+    }
 
-    const bannerAds = {
-      asin,
-      content: "records_Ads",
-      url: window.location.href,
-      pageTitle: document.title,
-      supplier,
-      productURL,
-      currentPrice: null,
-      originalPrice: null,
-      imgURL,
-      imgBASE64: null,
-      adsDescription,
-      imageHeight: img.height,
-      imageWidth: img.width,
-      imageSize: null,
-      videoPreview: null,
-      videoURL: null,
-    };
+    for (const item of items) {
+      const asin = item
+        .querySelector("div.a-section.a-spacing-none")
+        .getAttribute("data-asin");
+      const img = item.querySelector("img");
+      const imgURL = img["src"];
+      const productURL = item.querySelector("a")["href"];
+      const adsDescription = item.querySelector(
+        "span.a-truncate-full"
+      ).textContent;
 
-    detectDuplicateAndSendMsg(null, bannerAds);
+      const bannerAds = {
+        asin,
+        content: "records_Ads",
+        url: window.location.href,
+        pageTitle: document.title,
+        supplier,
+        productURL,
+        currentPrice: null,
+        originalPrice: null,
+        imgURL,
+        imgBASE64: null,
+        adsDescription,
+        imageHeight: img.height,
+        imageWidth: img.width,
+        imageSize: null,
+        videoPreview: null,
+        videoURL: null,
+      };
+
+      detectDuplicateAndSendMsg(null, bannerAds);
+    }
+  } catch (error) {
+    return;
   }
 }
 
@@ -190,18 +204,24 @@ function rhfScraper() {
   // define observer for monitoring the carousel list, fires when user move to another page
   const observerCarousel = new MutationObserver(() => {
     setTimeout(() => {
-      const carouselList = document
-        .querySelector(".rhf-frame")
-        .querySelector("ol");
+      const sponsoredTags = document
+        .querySelector("div.rhf-frame")
+        .querySelectorAll("div.spUl");
 
-      if (
-        !carouselList.getAttribute("aria-busy") ||
-        carouselList.getAttribute("aria-busy") === "false"
-      ) {
-        console.log("LIST LOADED");
-        const carouselItems = carouselList.querySelectorAll("li");
-        for (const item of carouselItems) {
-          sendMsgAndAddToSet(item);
+      for (const sponsoredTag of sponsoredTags) {
+        const carouselList = sponsoredTag
+          .closest("div.celwidget")
+          .querySelector("ol");
+
+        if (
+          !carouselList.getAttribute("aria-busy") ||
+          carouselList.getAttribute("aria-busy") === "false"
+        ) {
+          console.log("LIST LOADED");
+          const carouselItems = carouselList.querySelectorAll("li");
+          for (const item of carouselItems) {
+            sendMsgAndAddToSet(item);
+          }
         }
       }
     }, 1000);
@@ -213,30 +233,38 @@ function rhfScraper() {
     // clear the carousel list set
     carouselSet.clear();
     setTimeout(() => {
-      const sponsoredTag = bottomFrame.querySelector(
-        "._sp-rhf-desktop-carousel_style_spSponsored__RRHY_"
-      );
-
+      // if bottom frame is displayed
       if (bottomFrame.style.display === "block" && !bottomFrameDetected) {
-        bottomFrameDetected = true;
-        if (sponsoredTag) {
+        bottomFrameDetected = true; // no longer need to trigger the observer on bottom frame once it's displayed
+
+        // get all sponsored lists' tags
+        const sponsoredTags = bottomFrame.querySelectorAll("div.spUl");
+        if (sponsoredTags.length > 0) {
           console.log("HAS SPONSORED LIST");
-          if (!bottomFrame.querySelector("ol").getAttribute("aria-busy")) {
-            const carouselItems = bottomFrame
-              .querySelector("ol")
-              .querySelectorAll("li");
-            console.log(carouselItems);
-            for (const item of carouselItems) {
-              sendMsgAndAddToSet(item);
+
+          for (const sponsoredTag of sponsoredTags) {
+            // for each sponsor tag, get the list associated to it
+            const sponsoredList = sponsoredTag
+              .closest("div.celwidget")
+              .querySelector("ol");
+
+            // log the list at the first time
+            if (!sponsoredList.getAttribute("aria-busy")) {
+              const carouselItems = sponsoredList.querySelectorAll("li");
+              console.log(carouselItems);
+              for (const item of carouselItems) {
+                sendMsgAndAddToSet(item);
+              }
             }
+
+            observerCarousel.observe(sponsoredList, {
+              attributes: true,
+              attributeOldValue: true,
+            });
           }
-          observerCarousel.observe(bottomFrame.querySelector("ol"), {
-            attributes: true,
-            attributeOldValue: true,
-          });
         }
       }
-    }, 3000);
+    }, 2000);
   });
 
   observerBottomFrame.observe(bottomFrame, {
