@@ -6,6 +6,69 @@ function amazonScraper() {
     horizontalBannerScraper();
   };
 }
+
+/*
+ * Scraping ads at the top container
+ */
+function topBannerScraper() {
+  const supplierScraper = (node) => {
+    const supplierText = node
+      .querySelector("a.a-size-small")
+      .querySelector("span.a-truncate-full")
+      .querySelectorAll("span")[1].textContent;
+
+    console.log(
+      `Supplier: ${supplierText.substring(0, supplierText.length - 1)}`
+    );
+
+    return supplierText.substring(0, supplierText.length - 1);
+  };
+
+  const topBanner = document.querySelector(".s-widget.AdHolder");
+  let items = topBanner.querySelectorAll("._bGlmZ_item_awNhH");
+  let supplier = null;
+
+  if (items.length <= 0) {
+    items = topBanner.querySelectorAll("._bXVsd_gridColumn_2Jfab");
+    supplier = supplierScraper(topBanner);
+  } else {
+    supplier = supplierScraper(topBanner);
+  }
+
+  for (const item of items) {
+    const asin = item
+      .querySelector("div.a-section.a-spacing-none")
+      .getAttribute("data-asin");
+    const img = item.querySelector("img");
+    const imgURL = img["src"];
+    const productURL = item.querySelector("a")["href"];
+    const adsDescription = item.querySelector(
+      "span.a-truncate-full"
+    ).textContent;
+
+    const bannerAds = {
+      asin,
+      content: "records_Ads",
+      url: window.location.href,
+      pageTitle: document.title,
+      supplier,
+      productURL,
+      currentPrice: null,
+      originalPrice: null,
+      imgURL,
+      imgBASE64: null,
+      adsDescription,
+      imageHeight: img.height,
+      imageWidth: img.width,
+      imageSize: null,
+      videoPreview: null,
+      videoURL: null,
+    };
+
+    detectDuplicateAndSendMsg(null, bannerAds);
+  }
+}
+
 /*
  * Scraping ads at the bottom container
  */
