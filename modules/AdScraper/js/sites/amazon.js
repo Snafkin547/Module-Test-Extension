@@ -14,6 +14,7 @@ function amazonScraper() {
  * Scraping ads at the top container
  */
 function topBannerScraper() {
+  // helper function scrape supplier from top banner
   const supplierScraper = (node) => {
     const supplierText = node
       .querySelector("a.a-size-small")
@@ -34,8 +35,11 @@ function topBannerScraper() {
   };
 
   const topBanner = document.querySelector(".s-widget.AdHolder");
-  if (!topBanner) return;
+  if (!topBanner) return; // exit the function when top banner does not exist
 
+  // In rare occasion, top banner will match the pattern of normal list of ads
+  // It will successfully find the elemnent that contains the ads, but it will fail when trying to extract url
+  // In this situation, top banner will only send user to store website instead of an product
   try {
     let items = topBanner.querySelectorAll("._bGlmZ_item_awNhH");
     let supplier = null;
@@ -185,7 +189,7 @@ function rhfScraper() {
 
   let bottomFrame = document.querySelector(".rhf-frame");
 
-  // util functions for sending ads message to PDK and store it in the Set
+  // helper function for sending ads message to PDK and store it in the Set
   const sendMsgAndAddToSet = (node) => {
     if (!node.querySelector("div.a-section.a-spacing-none")) return;
 
