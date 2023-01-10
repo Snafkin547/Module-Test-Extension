@@ -1,8 +1,6 @@
-window.registerModuleCallback(bottomBannerScraper);
-window.registerModuleCallback(searchResultScraper);
-window.registerModuleCallback(onloadScraper);
+window.registerModuleCallback(amazonScraper);
 
-function onloadScraper() {
+function amazonScraper() {
   window.onload = function () {
     rhfScraper();
     horizontalBannerScraper();
@@ -14,7 +12,7 @@ function onloadScraper() {
 function bottomBannerScraper() {
   const bottomBanners = document.querySelectorAll(".s-widget.AdHolder");
   for (const banner of bottomBanners) {
-    items = banner.querySelectorAll("._bXVsd_container_3aZDQ");
+    const items = banner.querySelectorAll("._bXVsd_container_3aZDQ");
     if (!items) return;
 
     for (const item of items) {
@@ -62,7 +60,8 @@ function searchResultScraper() {
 
   const searchResults = document.querySelectorAll('[alt^="Sponsored Ad"]');
   for (const resultImage of searchResults) {
-    let item = resultImage.closest(".s-result-item");
+    let item = resultImage.closest("div.s-inner-result-item");
+    if (!item) item = resultImage.closest("div.s-result-item");
 
     const asin = item.getAttribute("data-asin");
     const currentPrice = extractCurrentPrice(item);
@@ -273,7 +272,7 @@ function extractOriginalPrice(node) {
       .querySelector(
         ".a-size-base.a-link-normal.s-underline-text.s-underline-link-text"
       )
-      .querySelector(".a-price:not(.a-text-price)");
+      .querySelector(".a-price.a-text-price");
 
     return originalPrice
       ? Number(
