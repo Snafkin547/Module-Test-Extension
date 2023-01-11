@@ -4,8 +4,9 @@ function googleScraper() {
   if (document.location.host !== "www.google.com") return;
 
   window.onload = function () {
-    allAdsWithoutPhoto();
-    allAdsWithPhoto();
+    allTabAdsWithoutPhoto();
+    allTabAdsWithPhoto();
+    imageTabAds();
   };
 }
 
