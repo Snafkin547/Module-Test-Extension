@@ -10,9 +10,9 @@ function googleScraper() {
 }
 
 /**
- * Google search at "all" tag: Scraping ads with no photo
+ * Google search at "all" tab: Scraping ads with no photo
  */
-function allAdsWithoutPhoto() {
+function allTabAdsWithoutPhoto() {
   const adsBanners = document.querySelectorAll("[aria-label=Ads]");
   for (const banner of adsBanners) {
     const adsContainers = banner.querySelectorAll('[data-text-ad="1"]');
@@ -28,9 +28,8 @@ function allAdsWithoutPhoto() {
         .replaceAll("/", "");
       const productURL = adsContainer.querySelector("a[data-pcu]")["href"];
       const img = adsContainer.querySelector('img[alt]:not([alt=""])');
-      const imgBASE64 = img?.src;
 
-      const listAds = {
+      const adsItem = {
         content: "recores_Ads",
         url: window.document.href,
         pageTitle: document.title,
@@ -39,7 +38,7 @@ function allAdsWithoutPhoto() {
         currentPrice: null,
         originalPrice: null,
         imgURL: null,
-        imgBASE64,
+        imgBASE64: img?.src,
         adsDescription,
         imageHeight: img?.height,
         imageWidth: img?.width,
@@ -48,15 +47,15 @@ function allAdsWithoutPhoto() {
         videoURL: null,
       };
 
-      console.log(listAds);
+      sendMsg(adsItem);
     }
   }
 }
 
 /**
- * Google search at "all" tag: Scraping ads with images
+ * Google search at "all" tab: Scraping ads with images
  */
-function allAdsWithPhoto() {
+function allTabAdsWithPhoto() {
   const adsContainers = document.querySelectorAll("div.cu-container");
 
   for (const adsContainer of adsContainers) {
@@ -66,7 +65,7 @@ function allAdsWithPhoto() {
         const adsDescription = item
           .querySelector("div.pla-unit-title")
           .querySelector("span").textContent;
-        const productATag = item.querySelector("a.clickable-card");
+        const productATag = item.querySelectorAll("a.clickable-card")[1];
         const supplier = productATag["ariaLabel"]
           .substring(productATag["ariaLabel"].lastIndexOf("from") + 4)
           .trim();
@@ -74,9 +73,8 @@ function allAdsWithPhoto() {
         const currentPrice = extractCurrentGooglePrice(item);
         const originalPrice = extractOriginalGooglePrice(item);
         const img = item.querySelector("img");
-        const imgBASE64 = img["src"];
 
-        const listAds = {
+        const adsItem = {
           content: "records_Ads",
           url: window.location.href,
           pageTitle: document.title,
@@ -85,7 +83,7 @@ function allAdsWithPhoto() {
           currentPrice,
           originalPrice,
           imgURL: null,
-          imgBASE64,
+          imgBASE64: img["src"],
           adsDescription,
           imageHeight: img.height,
           imageWidth: img.width,
@@ -94,7 +92,7 @@ function allAdsWithPhoto() {
           videoURL: null,
         };
 
-        console.log(listAds);
+        sendMsg(adsItem);
       } catch (error) {
         continue;
       }
@@ -102,6 +100,7 @@ function allAdsWithPhoto() {
   }
 }
 
+// helper functions
 function extractCurrentGooglePrice(node) {
   try {
     const priceNodes = node
