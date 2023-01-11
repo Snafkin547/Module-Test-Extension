@@ -4,8 +4,53 @@ function googleScraper() {
   if (document.location.host !== "www.google.com") return;
 
   window.onload = function () {
+    allAdsWithoutPhoto();
     allAdsWithPhoto();
   };
+}
+
+/**
+ * Google search at "all" tag: Scraping ads with no photo
+ */
+function allAdsWithoutPhoto() {
+  const adsBanners = document.querySelectorAll("[aria-label=Ads]");
+  for (const banner of adsBanners) {
+    const adsContainers = banner.querySelectorAll('[data-text-ad="1"]');
+    for (const adsContainer of adsContainers) {
+      const adsDescription = adsContainer
+        .querySelector("[role=heading]")
+        .querySelector("span").textContent;
+      const supplier = adsContainer
+        .querySelector("a[data-pcu]")
+        .getAttribute("data-pcu")
+        .split(",")[0]
+        .split("//")[1]
+        .replaceAll("/", "");
+      const productURL = adsContainer.querySelector("a[data-pcu]")["href"];
+      const img = adsContainer.querySelector('img[alt]:not([alt=""])');
+      const imgBASE64 = img?.src;
+
+      const listAds = {
+        content: "recores_Ads",
+        url: window.document.href,
+        pageTitle: document.title,
+        supplier,
+        productURL,
+        currentPrice: null,
+        originalPrice: null,
+        imgURL: null,
+        imgBASE64,
+        adsDescription,
+        imageHeight: img?.height,
+        imageWidth: img?.width,
+        imageSize: null,
+        videoPreview: null,
+        videoURL: null,
+      };
+
+      console.log(listAds);
+    }
+  }
 }
 
 /**
