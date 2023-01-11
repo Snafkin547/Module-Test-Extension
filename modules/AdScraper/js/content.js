@@ -11,3 +11,8 @@ function getBetween(str, str_a, str_b) {
   if (res[0] == "") return ltrim(res);
   return res;
 }
+
+function sendMsg(item) {
+  console.log(item);
+  // chrome.runtime.sendMessage(bannerAds);
+}
