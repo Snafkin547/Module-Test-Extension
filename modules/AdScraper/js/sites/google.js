@@ -100,6 +100,56 @@ function allTabAdsWithPhoto() {
   }
 }
 
+/**
+ * Google search at "image" tab: Scraping ads in carousel list
+ */
+function imageTabAds() {
+  const adsContainers = document.querySelectorAll("[data-id^=CarouselPLA]");
+
+  for (const adsContainer of adsContainers) {
+    const itemList = adsContainer.querySelectorAll("div.pla-unit");
+    for (const item of itemList) {
+      const supplier = item.querySelector("span[aria-label]").textContent;
+      const productURL = item.querySelectorAll("a.pla-link")[1]["href"];
+      const infoContainer = item
+        .querySelector("div[jsaction^=mouseenter]")
+        .querySelector("div[style]").parentNode;
+      const adsDescription =
+        infoContainer.childNodes[0].querySelector("span").textContent;
+      const currentPrice = Number(
+        infoContainer.childNodes[1].textContent
+          .replace("$", "")
+          .replace(",", "")
+      );
+      const originalPrice = infoContainer.childNodes[1]
+        .querySelector("span")
+        ?.textContent.replace("$", "")
+        .replace(",", "");
+      const img = item.querySelector("img");
+
+      const adsItem = {
+        content: "records_Ads",
+        url: window.location.href,
+        pageTitle: document.title,
+        supplier,
+        productURL,
+        currentPrice,
+        originalPrice: originalPrice ? originalPrice : null,
+        imgURL: null,
+        imgBASE64: img["src"],
+        adsDescription,
+        imageHeight: img.height,
+        imageWidth: img.width,
+        imageSize: null,
+        videoPreview: null,
+        videoURL: null,
+      };
+
+      sendMsg(adsItem);
+    }
+  }
+}
+
 // helper functions
 function extractCurrentGooglePrice(node) {
   try {
