@@ -114,17 +114,15 @@ function imageTabAds() {
       const productURL = item.querySelectorAll("a.pla-link")[1]["href"];
       const infoContainer = item
         .querySelector("div[jsaction^=mouseenter]")
-        .querySelector("div[style]").parentNode;
+        .querySelector("div[style^=margin]").parentNode;
       const adsDescription =
         infoContainer.childNodes[0].querySelector("span").textContent;
       const currentPrice = Number(
-        infoContainer.childNodes[1].textContent
-          .replace("$", "")
-          .replace(",", "")
+        infoContainer.childNodes[1].textContent.split("$")[1].replace(",", "")
       );
       const originalPrice = infoContainer.childNodes[1]
         .querySelector("span")
-        ?.textContent.replace("$", "")
+        ?.textContent.split("$")[1]
         .replace(",", "");
       const img = item.querySelector("img");
 
@@ -135,7 +133,7 @@ function imageTabAds() {
         supplier,
         productURL,
         currentPrice,
-        originalPrice: originalPrice ? originalPrice : null,
+        originalPrice: originalPrice ? Number(originalPrice) : null,
         imgURL: null,
         imgBASE64: img["src"],
         adsDescription,
@@ -159,7 +157,7 @@ function extractCurrentGooglePrice(node) {
       .nextSibling.querySelectorAll("span");
     const currentPrice = priceNodes[0].textContent;
 
-    return Number(currentPrice.replace("$", "").replace(",", ""));
+    return Number(currentPrice.split("$")[1].replace(",", ""));
   } catch (error) {
     return null;
   }
@@ -172,7 +170,7 @@ function extractOriginalGooglePrice(node) {
       .nextSibling.querySelectorAll("span");
     const orginalPrice = priceNodes[1].textContent; // index out of bound when there is no original price
 
-    return Number(orginalPrice.replace("$", "").replace(",", ""));
+    return Number(orginalPrice.split("$")[1].replace(",", ""));
   } catch (error) {
     return null;
   }
