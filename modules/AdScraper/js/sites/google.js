@@ -19,7 +19,7 @@ function adsWithPhotos() {
     for (const item of itemList) {
       const adsDescription = item
         .querySelector("div.pla-unit-title")
-        .querySelector("span.pymv4e").textContent;
+        .querySelector("span").textContent;
       const productATag = item.querySelector("a.clickable-card");
       const supplier = productATag["ariaLabel"]
         .substring(productATag["ariaLabel"].lastIndexOf("from") + 4)
@@ -55,8 +55,12 @@ function adsWithPhotos() {
 
 function extractCurrentGooglePrice(node) {
   try {
-    const currentPrice = node.querySelector("span.e10twf.ONTJqd").textContent;
-    return Number(currentPrice.replace("$", ""));
+    const priceNodes = node
+      .querySelector("div.pla-unit-title")
+      .nextSibling.querySelectorAll("span");
+    const currentPrice = priceNodes[0].textContent;
+
+    return Number(currentPrice.replace("$", "").replace(",", ""));
   } catch (error) {
     return null;
   }
@@ -64,8 +68,12 @@ function extractCurrentGooglePrice(node) {
 
 function extractOriginalGooglePrice(node) {
   try {
-    const orginalPrice = node.querySelector("span.hdYIY").textContent;
-    return Number(orginalPrice.replace("$", ""));
+    const priceNodes = node
+      .querySelector("div.pla-unit-title")
+      .nextSibling.querySelectorAll("span");
+    const orginalPrice = priceNodes[1].textContent; // index out of bound when there is no original price
+
+    return Number(orginalPrice.replace("$", "").replace(",", ""));
   } catch (error) {
     return null;
   }
