@@ -4,14 +4,14 @@ function googleScraper() {
   if (document.location.host !== "www.google.com") return;
 
   window.onload = function () {
-    adsWithPhotos();
+    allAdsWithPhoto();
   };
 }
 
-/*
- * Ads container with photos
+/**
+ * Google search at "all" tag: Scraping ads with images
  */
-function adsWithPhotos() {
+function allAdsWithPhoto() {
   const adsContainers = document.querySelectorAll("div.cu-container");
 
   for (const adsContainer of adsContainers) {
