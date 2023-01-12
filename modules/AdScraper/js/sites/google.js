@@ -120,12 +120,14 @@ function imageTabAds() {
       const adsDescription =
         infoContainer.childNodes[0].querySelector("span").textContent;
       const currentPrice = Number(
-        infoContainer.childNodes[1].textContent.split("$")[1].replace(",", "")
+        infoContainer.childNodes[1].textContent
+          .split("$")[1]
+          .replaceAll(",", "")
       );
       const originalPrice = infoContainer.childNodes[1]
         .querySelector("span")
         ?.textContent.split("$")[1]
-        .replace(",", "");
+        .replaceAll(",", "");
       const img = item.querySelector("img");
 
       const adsItem = {
@@ -159,7 +161,7 @@ function extractCurrentGooglePrice(node) {
       .nextSibling.querySelectorAll("span");
     const currentPrice = priceNodes[0].textContent;
 
-    return Number(currentPrice.split("$")[1].replace(",", ""));
+    return Number(currentPrice.split("$")[1].replaceAll(",", ""));
   } catch (error) {
     return null;
   }
@@ -172,7 +174,7 @@ function extractOriginalGooglePrice(node) {
       .nextSibling.querySelectorAll("span");
     const orginalPrice = priceNodes[1].textContent; // index out of bound when there is no original price
 
-    return Number(orginalPrice.split("$")[1].replace(",", ""));
+    return Number(orginalPrice.split("$")[1].replaceAll(",", ""));
   } catch (error) {
     return null;
   }
