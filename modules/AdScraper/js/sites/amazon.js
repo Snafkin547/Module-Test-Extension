@@ -377,8 +377,8 @@ function extractCurrentAmazonPrice(node) {
       ? Number(
           currentPrice
             .querySelector(".a-offscreen")
-            .textContent.replace("$", "")
-            .replace(",", "")
+            .textContent.split("$")[1]
+            .replaceAll(",", "")
         )
       : null;
   } catch (error) {
@@ -398,8 +398,8 @@ function extractOriginalAmazonPrice(node) {
       ? Number(
           originalPrice
             .querySelector(".a-offscreen")
-            .textContent.replace("$", "")
-            .replace(",", "")
+            .textContent.split("$")[1]
+            .replaceAll(",", "")
         )
       : null;
   } catch (error) {
