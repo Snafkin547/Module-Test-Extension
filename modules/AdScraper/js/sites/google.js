@@ -7,6 +7,7 @@ function googleScraper() {
     allTabAdsWithoutPhoto();
     allTabAdsWithPhoto();
     imageTabAds();
+    shoppingTabAds();
   };
 }
 
@@ -142,6 +143,60 @@ function imageTabAds() {
         imgURL: null,
         imgBASE64: img["src"],
         adsDescription,
+        imageHeight: img.height,
+        imageWidth: img.width,
+        videoPreview: null,
+        videoURL: null,
+      };
+
+      sendMsg(adsItem);
+    }
+  }
+}
+
+/**
+ * Google search at "shopping" tab: Scraping ads in carousel lists
+ */
+function shoppingTabAds() {
+  const adsContainers = document.querySelectorAll(
+    "div[class=sh-sr__shop-result-group]"
+  );
+
+  for (let idx = 0; idx < adsContainers.length; idx++) {
+    if (adsContainers.length < 3 && idx > 0) break; // when there is only one ads list
+    if (idx == adsContainers.length - 1) break; // ignore the last search related ... section
+    const itemList = adsContainers[idx].querySelectorAll("div[data-hveid]");
+    for (const item of itemList) {
+      const supplier = item
+        .querySelector("div.sh-np__seller-container[aria-label]")
+        ["ariaLabel"].substring(4)
+        .trim();
+      const adsDescription = item.querySelector(
+        ".sh-np__product-title"
+      ).textContent;
+      const productURL = item.querySelector("a")["href"];
+      const prices = item
+        .querySelector(".sh-np__product-title")
+        .nextSibling.querySelector("span")
+        .textContent.replaceAll(/[a-zA-Z]/g, "")
+        .split("$");
+      const currentPrice = Number(prices[1].replaceAll(",", ""));
+      const originalPrice =
+        prices.length > 2 ? Number(prices[2].replaceAll(",", "")) : null;
+      const img = item.querySelector("img");
+
+      const adsItem = {
+        content: "records_Ads",
+        url: window.location.href,
+        host: window.location.host,
+        pageTitle: document.title,
+        adsDescription,
+        supplier,
+        productURL,
+        currentPrice,
+        originalPrice,
+        imgURL: null,
+        imgBASE64: img["src"],
         imageHeight: img.height,
         imageWidth: img.width,
         videoPreview: null,
