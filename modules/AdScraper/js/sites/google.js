@@ -33,6 +33,7 @@ function allTabAdsWithoutPhoto() {
       const adsItem = {
         content: "recores_Ads",
         url: window.document.href,
+        host: window.location.host,
         pageTitle: document.title,
         supplier,
         productURL,
@@ -59,13 +60,15 @@ function allTabAdsWithPhoto() {
   const adsContainers = document.querySelectorAll("div.cu-container");
 
   for (const adsContainer of adsContainers) {
-    const itemList = adsContainer.querySelectorAll("div.mnr-c.pla-unit");
+    const itemList = adsContainer.querySelectorAll(
+      "div.mnr-c.pla-unit:not(.view-all-unit)"
+    );
     for (const item of itemList) {
       try {
         const adsDescription = item
           .querySelector("div.pla-unit-title")
           .querySelector("span").textContent;
-        const productATag = item.querySelectorAll("a.clickable-card")[1];
+        const productATag = item.querySelector("a.clickable-card[aria-label]");
         const supplier = productATag["ariaLabel"]
           .substring(productATag["ariaLabel"].lastIndexOf("from") + 4)
           .trim();
@@ -77,6 +80,7 @@ function allTabAdsWithPhoto() {
         const adsItem = {
           content: "records_Ads",
           url: window.location.href,
+          host: window.location.host,
           pageTitle: document.title,
           supplier,
           productURL,
@@ -93,6 +97,7 @@ function allTabAdsWithPhoto() {
 
         sendMsg(adsItem);
       } catch (error) {
+        console.log(error);
         continue;
       }
     }
@@ -127,6 +132,7 @@ function imageTabAds() {
       const adsItem = {
         content: "records_Ads",
         url: window.location.href,
+        host: window.location.host,
         pageTitle: document.title,
         supplier,
         productURL,
