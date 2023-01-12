@@ -97,7 +97,6 @@ function allTabAdsWithPhoto() {
 
         sendMsg(adsItem);
       } catch (error) {
-        console.log(error);
         continue;
       }
     }
