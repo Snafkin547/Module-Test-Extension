@@ -32,7 +32,7 @@ function allTabAdsWithoutPhoto() {
       const img = adsContainer.querySelector('img[alt]:not([alt=""])');
 
       const adsItem = {
-        content: "recores_Ads",
+        content: "records_ads",
         url: window.document.href,
         host: window.location.host,
         pageTitle: document.title,
@@ -79,7 +79,7 @@ function allTabAdsWithPhoto() {
         const img = item.querySelector("img");
 
         const adsItem = {
-          content: "records_Ads",
+          content: "records_ads",
           url: window.location.href,
           host: window.location.host,
           pageTitle: document.title,
@@ -132,7 +132,7 @@ function imageTabAds() {
       const img = item.querySelector("img");
 
       const adsItem = {
-        content: "records_Ads",
+        content: "records_ads",
         url: window.location.href,
         host: window.location.host,
         pageTitle: document.title,
@@ -186,7 +186,7 @@ function shoppingTabAds() {
       const img = item.querySelector("img");
 
       const adsItem = {
-        content: "records_Ads",
+        content: "records_ads",
         url: window.location.href,
         host: window.location.host,
         pageTitle: document.title,

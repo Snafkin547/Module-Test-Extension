@@ -66,7 +66,7 @@ function topBannerScraper() {
 
       const bannerAds = {
         asin,
-        content: "records_Ads",
+        content: "records_ads",
         url: window.location.href,
         host: window.location.host,
         pageTitle: document.title,
@@ -113,7 +113,7 @@ function bottomBannerScraper() {
 
       const bannerAds = {
         asin: null,
-        content: "records_Ads",
+        content: "records_ads",
         url: window.location.href,
         host: window.location.host,
         pageTitle: document.title,
@@ -211,7 +211,7 @@ function rhfScraper() {
 
     const listAds = {
       asin,
-      content: "records_Ads",
+      content: "records_ads",
       url: window.location.href,
       host: window.location.host,
       pageTitle: document.title,
@@ -323,7 +323,7 @@ function horizontalBannerScraper() {
 
       const bannerAds = {
         asin,
-        content: "records_Ads",
+        content: "records_ads",
         url: window.location.href,
         host: window.location.host,
         pageTitle: document.title,
