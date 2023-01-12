@@ -78,7 +78,6 @@ function topBannerScraper() {
         adsDescription,
         imageHeight: img.height,
         imageWidth: img.width,
-        imageSize: null,
         videoPreview: null,
         videoURL: null,
       };
@@ -125,7 +124,6 @@ function bottomBannerScraper() {
         adsDescription,
         imageHeight: img.height,
         imageWidth: img.width,
-        imageSize: null,
         videoPreview: null,
         videoURL: null,
       };
@@ -223,7 +221,6 @@ function rhfScraper() {
       adsDescription,
       imageHeight: img.height,
       imageWidth: img.width,
-      imageSize: null,
       videoPreview: null,
       videoURL: null,
     };
@@ -335,7 +332,6 @@ function horizontalBannerScraper() {
         adsDescription,
         imageHeight: img.height,
         imageWidth: img.width,
-        imageSize: null,
         videoPreview,
         videoURL,
       };

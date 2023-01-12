@@ -43,7 +43,6 @@ function allTabAdsWithoutPhoto() {
         adsDescription,
         imageHeight: img?.height,
         imageWidth: img?.width,
-        imageSize: null,
         videoPreview: null,
         videoURL: null,
       };
@@ -88,7 +87,6 @@ function allTabAdsWithPhoto() {
           adsDescription,
           imageHeight: img.height,
           imageWidth: img.width,
-          imageSize: null,
           videoPreview: null,
           videoURL: null,
         };
@@ -139,7 +137,6 @@ function imageTabAds() {
         adsDescription,
         imageHeight: img.height,
         imageWidth: img.width,
-        imageSize: null,
         videoPreview: null,
         videoURL: null,
       };
