@@ -66,19 +66,19 @@ function topBannerScraper() {
 
       const bannerAds = {
         asin,
-        content: "records_Ads",
+        content: "records_ads",
         url: window.location.href,
+        host: window.location.host,
         pageTitle: document.title,
+        adsDescription,
         supplier,
         productURL,
         currentPrice: null,
         originalPrice: null,
         imgURL,
         imgBASE64: null,
-        adsDescription,
         imageHeight: img.height,
         imageWidth: img.width,
-        imageSize: null,
         videoPreview: null,
         videoURL: null,
       };
@@ -113,19 +113,19 @@ function bottomBannerScraper() {
 
       const bannerAds = {
         asin: null,
-        content: "records_Ads",
+        content: "records_ads",
         url: window.location.href,
+        host: window.location.host,
         pageTitle: document.title,
+        adsDescription,
         supplier,
         productURL,
         currentPrice: null,
         originalPrice: null,
         imgURL,
         imgBASE64: null,
-        adsDescription,
         imageHeight: img.height,
         imageWidth: img.width,
-        imageSize: null,
         videoPreview: null,
         videoURL: null,
       };
@@ -148,8 +148,8 @@ function searchResultScraper() {
     if (!item) item = resultImage.closest("div.s-result-item");
 
     const asin = item.getAttribute("data-asin");
-    const currentPrice = extractCurrentPrice(item);
-    const originalPrice = extractOriginalPrice(item);
+    const currentPrice = extractCurrentAmazonPrice(item);
+    const originalPrice = extractOriginalAmazonPrice(item);
     const imgURL = resultImage["src"];
     const productURL = item.querySelector("a.a-link-normal")["href"];
     const adsDescription = item.querySelector(
@@ -204,26 +204,26 @@ function rhfScraper() {
       "span.a-truncate-full"
     ).textContent;
     const productURL = node.querySelector("a")["href"];
-    const currentPrice = extractCurrentPrice(node);
-    const originalPrice = extractOriginalPrice(node);
+    const currentPrice = extractCurrentAmazonPrice(node);
+    const originalPrice = extractOriginalAmazonPrice(node);
     const img = node.querySelector("img");
     const imgURL = img["src"];
 
     const listAds = {
       asin,
-      content: "records_Ads",
+      content: "records_ads",
       url: window.location.href,
+      host: window.location.host,
       pageTitle: document.title,
-      supplier: "",
+      adsDescription,
+      supplier: null,
       productURL,
       currentPrice,
       originalPrice,
       imgURL,
       imgBASE64: null,
-      adsDescription,
       imageHeight: img.height,
       imageWidth: img.width,
-      imageSize: null,
       videoPreview: null,
       videoURL: null,
     };
@@ -310,8 +310,8 @@ function horizontalBannerScraper() {
   if (horizontalBanners.length > 0) {
     for (const banner of horizontalBanners) {
       const asin = extractAsinFromUrl(banner.querySelector("a")["href"]);
-      const currentPrice = extractCurrentPrice(banner);
-      const originalPrice = extractOriginalPrice(banner);
+      const currentPrice = extractCurrentAmazonPrice(banner);
+      const originalPrice = extractOriginalAmazonPrice(banner);
       const img = banner.querySelector("img");
       const imgURL = img["src"];
       const video = banner.closest(".sg-row").querySelector("video");
@@ -323,19 +323,19 @@ function horizontalBannerScraper() {
 
       const bannerAds = {
         asin,
-        content: "records_Ads",
+        content: "records_ads",
         url: window.location.href,
+        host: window.location.host,
         pageTitle: document.title,
+        adsDescription,
         supplier: null,
         productURL,
         currentPrice,
         originalPrice,
         imgURL,
         imgBASE64: null,
-        adsDescription,
         imageHeight: img.height,
         imageWidth: img.width,
-        imageSize: null,
         videoPreview,
         videoURL,
       };
@@ -353,8 +353,7 @@ function detectDuplicateAndSendMsg(collection, item) {
     collection.add(item.asin);
   }
 
-  console.log(item);
-  // chrome.runtime.sendMessage(bannerAds);
+  sendMsg(item);
 }
 
 function extractAsinFromUrl(url) {
@@ -365,7 +364,7 @@ function extractAsinFromUrl(url) {
   return url.match(regex)[3];
 }
 
-function extractCurrentPrice(node) {
+function extractCurrentAmazonPrice(node) {
   try {
     const currentPrice = node
       .querySelector(
@@ -377,7 +376,8 @@ function extractCurrentPrice(node) {
       ? Number(
           currentPrice
             .querySelector(".a-offscreen")
-            .textContent.replace("$", "")
+            .textContent.split("$")[1]
+            .replaceAll(",", "")
         )
       : null;
   } catch (error) {
@@ -385,7 +385,7 @@ function extractCurrentPrice(node) {
   }
 }
 
-function extractOriginalPrice(node) {
+function extractOriginalAmazonPrice(node) {
   try {
     const originalPrice = node
       .querySelector(
@@ -397,7 +397,8 @@ function extractOriginalPrice(node) {
       ? Number(
           originalPrice
             .querySelector(".a-offscreen")
-            .textContent.replace("$", "")
+            .textContent.split("$")[1]
+            .replaceAll(",", "")
         )
       : null;
   } catch (error) {
