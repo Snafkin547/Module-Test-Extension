@@ -353,8 +353,7 @@ function detectDuplicateAndSendMsg(collection, item) {
     collection.add(item.asin);
   }
 
-  console.log(item);
-  // chrome.runtime.sendMessage(bannerAds);
+  sendMsg(item);
 }
 
 function extractAsinFromUrl(url) {
