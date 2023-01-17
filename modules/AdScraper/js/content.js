@@ -14,5 +14,5 @@ function getBetween(str, str_a, str_b) {
 
 function sendMsg(item) {
   console.log(item);
-  // chrome.runtime.sendMessage(bannerAds);
+  chrome.runtime.sendMessage(item);
 }
