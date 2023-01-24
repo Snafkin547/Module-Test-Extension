@@ -105,6 +105,50 @@ function googleAllTabAdsWithPhoto() {
         continue;
       }
     }
+
+    const catList = adsContainer.querySelectorAll("g-inner-card");
+    for (const item of itemList) {
+      try {
+        const adsDescription = item.querySelector(
+          '[aria-label^="Title of"]'
+        ).textContent;
+
+        const supplier = item.querySelector(
+          'span[aria-label^="From"]'
+        ).textContent;
+        const productURL = item.querySelector("a")["href"];
+        const currentPrice = Number(
+          item
+            .querySelector('[aria-label^="Title of"]')
+            .parentNode.childNodes[2].textContent.replaceAll(/[^0-9]/g, "")
+        );
+        const img = item.querySelector("img");
+
+        listenClickOnAd(item, productURL);
+
+        const adsItem = {
+          content: "records_ads",
+          url: window.location.href,
+          host: window.location.host,
+          pageTitle: document.title,
+          adsDescription,
+          supplier,
+          productURL,
+          currentPrice,
+          originalPrice: null,
+          imgURL: null,
+          imgBASE64: img["src"],
+          imageHeight: img.height,
+          imageWidth: img.width,
+          videoPreview: null,
+          videoURL: null,
+        };
+
+        sendMsg(adsItem);
+      } catch (error) {
+        continue;
+      }
+    }
   }
 }
 
