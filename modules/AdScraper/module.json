@@ -4,7 +4,8 @@
   "content_scripts": [
     "js/content.js",
     "js/sites/amazon.js",
-    "js/sites/google.js"
+    "js/sites/google.js",
+    "js/sites/duckduckgo.js"
   ],
   "permissions": [],
   "host_permissions": []
