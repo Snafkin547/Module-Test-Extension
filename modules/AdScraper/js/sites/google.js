@@ -35,7 +35,7 @@ function googleAllTabAdsWithoutPhoto() {
 
       const adsItem = {
         content: "records_ads",
-        url: window.document.href,
+        url: window.location.href,
         host: window.location.host,
         pageTitle: document.title,
         adsDescription,
