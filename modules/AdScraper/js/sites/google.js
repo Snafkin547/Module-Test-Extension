@@ -4,17 +4,17 @@ function googleScraper() {
   if (document.location.host !== "www.google.com") return;
 
   window.onload = function () {
-    allTabAdsWithoutPhoto();
-    allTabAdsWithPhoto();
-    imageTabAds();
-    shoppingTabAds();
+    googleAllTabAdsWithoutPhoto();
+    googleAllTabAdsWithPhoto();
+    googleImageTabAds();
+    googleShoppingTabAds();
   };
 }
 
 /**
  * Google search at "all" tab: Scraping ads with no photo
  */
-function allTabAdsWithoutPhoto() {
+function googleAllTabAdsWithoutPhoto() {
   const adsBanners = document.querySelectorAll("[aria-label=Ads]");
   for (const banner of adsBanners) {
     const adsContainers = banner.querySelectorAll('[data-text-ad="1"]');
@@ -30,6 +30,8 @@ function allTabAdsWithoutPhoto() {
         .replaceAll("/", "");
       const productURL = adsContainer.querySelector("a[data-pcu]")["href"];
       const img = adsContainer.querySelector('img[alt]:not([alt=""])');
+
+      listenClickOnAd(adsContainer, productURL);
 
       const adsItem = {
         content: "records_ads",
@@ -57,7 +59,7 @@ function allTabAdsWithoutPhoto() {
 /**
  * Google search at "all" tab: Scraping ads with images
  */
-function allTabAdsWithPhoto() {
+function googleAllTabAdsWithPhoto() {
   const adsContainers = document.querySelectorAll("div.cu-container");
 
   for (const adsContainer of adsContainers) {
@@ -77,6 +79,8 @@ function allTabAdsWithPhoto() {
         const currentPrice = extractCurrentGooglePrice(item);
         const originalPrice = extractOriginalGooglePrice(item);
         const img = item.querySelector("img");
+
+        listenClickOnAd(item, productURL);
 
         const adsItem = {
           content: "records_ads",
@@ -107,7 +111,7 @@ function allTabAdsWithPhoto() {
 /**
  * Google search at "image" tab: Scraping ads in carousel list
  */
-function imageTabAds() {
+function googleImageTabAds() {
   const adsContainers = document.querySelectorAll("[data-id^=CarouselPLA]");
 
   for (const adsContainer of adsContainers) {
@@ -130,6 +134,8 @@ function imageTabAds() {
         ?.textContent.split("$")[1]
         .replaceAll(",", "");
       const img = item.querySelector("img");
+
+      listenClickOnAd(item, productURL);
 
       const adsItem = {
         content: "records_ads",
@@ -157,7 +163,7 @@ function imageTabAds() {
 /**
  * Google search at "shopping" tab: Scraping ads in carousel lists
  */
-function shoppingTabAds() {
+function googleShoppingTabAds() {
   const adsContainers = document.querySelectorAll(
     "div[class=sh-sr__shop-result-group]"
   );
@@ -184,6 +190,8 @@ function shoppingTabAds() {
       const originalPrice =
         prices.length > 2 ? Number(prices[2].replaceAll(",", "")) : null;
       const img = item.querySelector("img");
+
+      listenClickOnAd(item, productURL);
 
       const adsItem = {
         content: "records_ads",

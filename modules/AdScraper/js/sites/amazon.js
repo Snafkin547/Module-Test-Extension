@@ -4,18 +4,18 @@ function amazonScraper() {
   if (document.location.host !== "www.amazon.com") return;
 
   window.onload = function () {
-    topBannerScraper();
-    bottomBannerScraper();
-    searchResultScraper();
-    rhfScraper();
-    horizontalBannerScraper();
+    amazonTopBannerScraper();
+    amazonBottomBannerScraper();
+    amazonSearchResultScraper();
+    amazonRhfScraper();
+    amazonHorizontalBannerScraper();
   };
 }
 
 /*
  * Scraping ads at the top container
  */
-function topBannerScraper() {
+function amazonTopBannerScraper() {
   // helper function scrape supplier from top banner
   const supplierScraper = (node) => {
     const supplierText = node
@@ -64,6 +64,8 @@ function topBannerScraper() {
         "span.a-truncate-full"
       ).textContent;
 
+      listenClickOnAd(item, productURL);
+
       const bannerAds = {
         asin,
         content: "records_ads",
@@ -93,7 +95,7 @@ function topBannerScraper() {
 /*
  * Scraping ads at the bottom container
  */
-function bottomBannerScraper() {
+function amazonBottomBannerScraper() {
   const bottomBanners = document.querySelectorAll(".s-widget.AdHolder");
   for (const banner of bottomBanners) {
     const items = banner.querySelectorAll("._bXVsd_container_3aZDQ");
@@ -110,6 +112,8 @@ function bottomBannerScraper() {
       const adsDescription = item.querySelector(
         "span.a-truncate-full"
       ).textContent;
+
+      listenClickOnAd(item, productURL);
 
       const bannerAds = {
         asin: null,
@@ -138,7 +142,7 @@ function bottomBannerScraper() {
 /**
  * Scraping ads inside the search result
  */
-function searchResultScraper() {
+function amazonSearchResultScraper() {
   // It did not contain supplier name itself, only description in title
   const searchResultCollection = new Set();
 
@@ -155,6 +159,8 @@ function searchResultScraper() {
     const adsDescription = item.querySelector(
       "span.a-color-base.a-text-normal"
     ).textContent;
+
+    listenClickOnAd(item, productURL);
 
     const resultAds = {
       asin,
@@ -182,7 +188,7 @@ function searchResultScraper() {
 /**
  * scraping recommended based on browsing history at the bottom (rhf-frame)
  */
-function rhfScraper() {
+function amazonRhfScraper() {
   // For each search, the rhf-frame will only be loaded once when user scroll down
   // Clear the set when rhf-frame is changed to visible
   // Add items from the list to the set as user going through each pages
@@ -208,6 +214,8 @@ function rhfScraper() {
     const originalPrice = extractOriginalAmazonPrice(node);
     const img = node.querySelector("img");
     const imgURL = img["src"];
+
+    listenClickOnAd(node, productURL);
 
     const listAds = {
       asin,
@@ -303,7 +311,7 @@ function rhfScraper() {
 /**
  * scraping horizontal banners in the middle or at the bottom
  */
-function horizontalBannerScraper() {
+function amazonHorizontalBannerScraper() {
   const horizontalBannerCollection = new Set();
 
   const horizontalBanners = document.querySelectorAll(".sbv-product");
@@ -320,6 +328,8 @@ function horizontalBannerScraper() {
       const productURL = banner.querySelector("a.a-link-normal")["href"];
       const adsDescription =
         banner.querySelector("span.a-text-normal").textContent;
+
+      listenClickOnAd(banner, productURL);
 
       const bannerAds = {
         asin,

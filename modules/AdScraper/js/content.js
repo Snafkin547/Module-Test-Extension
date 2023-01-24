@@ -12,7 +12,19 @@ function getBetween(str, str_a, str_b) {
   return res;
 }
 
+function listenClickOnAd(node, redirectURL) {
+  node.addEventListener("click", () => {
+    const redirectEvent = {
+      host: window.location.host,
+      url: window.location.href,
+      redirectURL,
+    };
+
+    console.log(`Redirecting to ${redirectEvent}`);
+  });
+}
+
 function sendMsg(item) {
   console.log(item);
-  chrome.runtime.sendMessage(item);
+  // chrome.runtime.sendMessage(item);
 }
