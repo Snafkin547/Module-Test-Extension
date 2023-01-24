@@ -120,7 +120,7 @@ function googleAllTabAdsWithPhoto() {
         const currentPrice = Number(
           item
             .querySelector('[aria-label^="Title of"]')
-            .parentNode.childNodes[2].textContent.replaceAll(/[^0-9]/g, "")
+            .parentNode.childNodes[2].textContent.replaceAll(/[^0-9^\.]/g, "")
         );
         const img = item.querySelector("img");
 
