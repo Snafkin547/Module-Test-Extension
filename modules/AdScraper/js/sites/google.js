@@ -106,12 +106,12 @@ function googleAllTabAdsWithPhoto() {
       }
     }
 
-    const catList = adsContainer.querySelectorAll("g-inner-card");
-    for (const item of itemList) {
+    const carList = adsContainer.querySelectorAll("g-inner-card");
+    for (const item of carList) {
       try {
-        const adsDescription = item.querySelector(
-          '[aria-label^="Title of"]'
-        ).textContent;
+        const adsDescription = item
+          .querySelector('[aria-label^="Title of"]')
+          ["ariaLabel"].replace("Title of ", "");
 
         const supplier = item.querySelector(
           'span[aria-label^="From"]'
