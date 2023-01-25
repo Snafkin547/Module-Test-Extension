@@ -5,6 +5,7 @@
     "js/content.js",
     "js/sites/amazon.js",
     "js/sites/google.js",
+    "js/sites/bing.js",
     "js/sites/duckduckgo.js"
   ],
   "permissions": [],
