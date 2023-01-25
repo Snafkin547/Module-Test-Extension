@@ -58,11 +58,12 @@ function amazonTopBannerScraper() {
         .querySelector("div.a-section.a-spacing-none")
         .getAttribute("data-asin");
       const img = item.querySelector("img");
-      const imgURL = img["src"];
       const productURL = item.querySelector("a")["href"];
       const adsDescription = item.querySelector(
         "span.a-truncate-full"
       ).textContent;
+      let imgURL = isURL(img["src"]) ? img["src"] : null;
+      let imgBASE64 = isURL(img["src"]) ? null : img["src"];
 
       listenClickOnAd(item, productURL);
 
@@ -78,7 +79,7 @@ function amazonTopBannerScraper() {
         currentPrice: null,
         originalPrice: null,
         imgURL,
-        imgBASE64: null,
+        imgBASE64,
         imageHeight: img.height,
         imageWidth: img.width,
         videoPreview: null,
@@ -103,7 +104,6 @@ function amazonBottomBannerScraper() {
 
     for (const item of items) {
       const img = item.querySelector("img");
-      const imgURL = img["src"];
       const supplier = img["alt"].substring(
         img["alt"].indexOf("from") + 5,
         img["alt"].indexOf(".")
@@ -112,6 +112,8 @@ function amazonBottomBannerScraper() {
       const adsDescription = item.querySelector(
         "span.a-truncate-full"
       ).textContent;
+      let imgURL = isURL(img["src"]) ? img["src"] : null;
+      let imgBASE64 = isURL(img["src"]) ? null : img["src"];
 
       listenClickOnAd(item, productURL);
 
@@ -127,7 +129,7 @@ function amazonBottomBannerScraper() {
         currentPrice: null,
         originalPrice: null,
         imgURL,
-        imgBASE64: null,
+        imgBASE64,
         imageHeight: img.height,
         imageWidth: img.width,
         videoPreview: null,
@@ -154,11 +156,12 @@ function amazonSearchResultScraper() {
     const asin = item.getAttribute("data-asin");
     const currentPrice = extractCurrentAmazonPrice(item);
     const originalPrice = extractOriginalAmazonPrice(item);
-    const imgURL = resultImage["src"];
     const productURL = item.querySelector("a.a-link-normal")["href"];
     const adsDescription = item.querySelector(
       "span.a-color-base.a-text-normal"
     ).textContent;
+    let imgURL = isURL(resultImage["src"]) ? resultImage["src"] : null;
+    let imgBASE64 = isURL(resultImage["src"]) ? null : resultImage["src"];
 
     listenClickOnAd(item, productURL);
 
@@ -172,7 +175,7 @@ function amazonSearchResultScraper() {
       currentPrice,
       originalPrice,
       imgURL,
-      imgBASE64: null,
+      imgBASE64,
       adsDescription,
       imageHeight: resultImage.height,
       imageWidth: resultImage.width,
@@ -213,7 +216,8 @@ function amazonRhfScraper() {
     const currentPrice = extractCurrentAmazonPrice(node);
     const originalPrice = extractOriginalAmazonPrice(node);
     const img = node.querySelector("img");
-    const imgURL = img["src"];
+    let imgURL = isURL(img["src"]) ? img["src"] : null;
+    let imgBASE64 = isURL(img["src"]) ? null : img["src"];
 
     listenClickOnAd(node, productURL);
 
@@ -229,7 +233,7 @@ function amazonRhfScraper() {
       currentPrice,
       originalPrice,
       imgURL,
-      imgBASE64: null,
+      imgBASE64,
       imageHeight: img.height,
       imageWidth: img.width,
       videoPreview: null,
@@ -321,13 +325,14 @@ function amazonHorizontalBannerScraper() {
       const currentPrice = extractCurrentAmazonPrice(banner);
       const originalPrice = extractOriginalAmazonPrice(banner);
       const img = banner.querySelector("img");
-      const imgURL = img["src"];
       const video = banner.closest(".sg-row").querySelector("video");
       const videoURL = video["src"];
       const videoPreview = video["poster"];
       const productURL = banner.querySelector("a.a-link-normal")["href"];
       const adsDescription =
         banner.querySelector("span.a-text-normal").textContent;
+      let imgURL = isURL(img["src"]) ? img["src"] : null;
+      let imgBASE64 = isURL(img["src"]) ? null : img["src"];
 
       listenClickOnAd(banner, productURL);
 
@@ -343,7 +348,7 @@ function amazonHorizontalBannerScraper() {
         currentPrice,
         originalPrice,
         imgURL,
-        imgBASE64: null,
+        imgBASE64,
         imageHeight: img.height,
         imageWidth: img.width,
         videoPreview,

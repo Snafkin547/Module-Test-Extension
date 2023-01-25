@@ -30,6 +30,8 @@ function googleAllTabAdsWithoutPhoto() {
         .replaceAll("/", "");
       const productURL = adsContainer.querySelector("a[data-pcu]")["href"];
       const img = adsContainer.querySelector('img[alt]:not([alt=""])');
+      let imgURL = isURL(img?.src) ? img.src : null;
+      let imgBASE64 = isURL(img?.src) ? null : img?.src;
 
       listenClickOnAd(adsContainer, productURL);
 
@@ -43,8 +45,8 @@ function googleAllTabAdsWithoutPhoto() {
         productURL,
         currentPrice: null,
         originalPrice: null,
-        imgURL: null,
-        imgBASE64: img?.src,
+        imgURL,
+        imgBASE64,
         imageHeight: img?.height,
         imageWidth: img?.width,
         videoPreview: null,
@@ -79,6 +81,8 @@ function googleAllTabAdsWithPhoto() {
         const currentPrice = extractCurrentGooglePrice(item);
         const originalPrice = extractOriginalGooglePrice(item);
         const img = item.querySelector("img");
+        let imgURL = isURL(img["src"]) ? img["src"] : null;
+        let imgBASE64 = isURL(img["src"]) ? null : img["src"];
 
         listenClickOnAd(item, productURL);
 
@@ -92,8 +96,8 @@ function googleAllTabAdsWithPhoto() {
           productURL,
           currentPrice,
           originalPrice,
-          imgURL: null,
-          imgBASE64: img["src"],
+          imgURL,
+          imgBASE64,
           imageHeight: img.height,
           imageWidth: img.width,
           videoPreview: null,
@@ -123,6 +127,8 @@ function googleAllTabAdsWithPhoto() {
             .parentNode.childNodes[2].textContent.replaceAll(/[^0-9^\.]/g, "")
         );
         const img = item.querySelector("img");
+        let imgURL = isURL(img["src"]) ? img["src"] : null;
+        let imgBASE64 = isURL(img["src"]) ? null : img["src"];
 
         listenClickOnAd(item, productURL);
 
@@ -136,8 +142,8 @@ function googleAllTabAdsWithPhoto() {
           productURL,
           currentPrice,
           originalPrice: null,
-          imgURL: null,
-          imgBASE64: img["src"],
+          imgURL,
+          imgBASE64,
           imageHeight: img.height,
           imageWidth: img.width,
           videoPreview: null,
@@ -178,6 +184,8 @@ function googleImageTabAds() {
         ?.textContent.split("$")[1]
         .replaceAll(",", "");
       const img = item.querySelector("img");
+      let imgURL = isURL(img["src"]) ? img["src"] : null;
+      let imgBASE64 = isURL(img["src"]) ? null : img["src"];
 
       listenClickOnAd(item, productURL);
 
@@ -191,8 +199,8 @@ function googleImageTabAds() {
         productURL,
         currentPrice,
         originalPrice: originalPrice ? Number(originalPrice) : null,
-        imgURL: null,
-        imgBASE64: img["src"],
+        imgURL,
+        imgBASE64,
         imageHeight: img.height,
         imageWidth: img.width,
         videoPreview: null,
@@ -214,6 +222,8 @@ function googleImageTabAds() {
           .replaceAll(/[^0-9^\.]/g, "")
       );
       const img = item.querySelector("img");
+      let imgURL = isURL(img["src"]) ? img["src"] : null;
+      let imgBASE64 = isURL(img["src"]) ? null : img["src"];
 
       listenClickOnAd(item, productURL);
 
@@ -227,8 +237,8 @@ function googleImageTabAds() {
         productURL,
         currentPrice,
         originalPrice: null,
-        imgURL: img["src"],
-        imgBASE64: null,
+        imgURL,
+        imgBASE64,
         imageHeight: img.height,
         imageWidth: img.width,
         videoPreview: null,

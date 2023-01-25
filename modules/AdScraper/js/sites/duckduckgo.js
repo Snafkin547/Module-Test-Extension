@@ -79,10 +79,12 @@ function ddgAllTabsAdsWithPhoto() {
       .querySelector("div.module--carousel__body__pricing")
       .querySelector("span.module--carousel__body__original-price")
       ?.textContent.replaceAll(/[^0-9^\.]/g, "");
-    const imgURL = decodeURIComponent(
+    const imgSrc = decodeURIComponent(
       adsContainer.querySelector("div.js-carousel-item-image").style
         .backgroundImage
     ).match(/http[^'"]*/g)[0];
+    let imgURL = isURL(imgSrc) ? imgSrc : null;
+    let imgBASE64 = isURL(imgSrc) ? null : imgSrc;
 
     listenClickOnAd(adsContainer, productURL);
 
@@ -97,7 +99,7 @@ function ddgAllTabsAdsWithPhoto() {
       currentPrice: Number(currentPriceNode),
       originalPrice: originalPriceNode ? Number(originalPriceNode) : null,
       imgURL,
-      imgBASE64: null,
+      imgBASE64,
       imageHeight: null,
       imageWidth: null,
       videoPreview: null,
@@ -130,10 +132,12 @@ function ddgAllTabsSideAds() {
         .querySelector("span")
         .textContent.replaceAll(/[^0-9^\.]/g, "")
     );
-    const imgURL = decodeURIComponent(
+    const imgSrc = decodeURIComponent(
       adsContainer.querySelector("div.js-carousel-item-image").style
         .backgroundImage
     ).match(/http[^'"]*/g)[0];
+    let imgURL = isURL(imgSrc) ? imgSrc : null;
+    let imgBASE64 = isURL(imgSrc) ? null : imgSrc;
 
     listenClickOnAd(adsContainer, productURL);
 
@@ -148,7 +152,7 @@ function ddgAllTabsSideAds() {
       currentPrice,
       originalPrice: null,
       imgURL,
-      imgBASE64: null,
+      imgBASE64,
       imageHeight: null,
       imageWidth: null,
       videoPreview: null,
