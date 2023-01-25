@@ -201,6 +201,42 @@ function googleImageTabAds() {
 
       sendMsg(adsItem);
     }
+
+    const carList = adsContainer.querySelectorAll("div.sc-it");
+    for (const item of carList) {
+      const infoContainer = item.querySelector("img").parentNode.nextSibling;
+      const adsDescription = infoContainer.childNodes[0].textContent;
+      const supplier = infoContainer.childNodes[5].textContent;
+      const productURL = item.querySelector("a")["href"];
+      const currentPrice = Number(
+        infoContainer.childNodes[2].textContent
+          .split("$")[1]
+          .replaceAll(/[^0-9^\.]/g, "")
+      );
+      const img = item.querySelector("img");
+
+      listenClickOnAd(item, productURL);
+
+      const adsItem = {
+        content: "records_ads",
+        url: window.location.href,
+        host: window.location.host,
+        pageTitle: document.title,
+        adsDescription,
+        supplier,
+        productURL,
+        currentPrice,
+        originalPrice: null,
+        imgURL: img["src"],
+        imgBASE64: null,
+        imageHeight: img.height,
+        imageWidth: img.width,
+        videoPreview: null,
+        videoURL: null,
+      };
+
+      sendMsg(adsItem);
+    }
   }
 }
 
