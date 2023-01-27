@@ -28,7 +28,9 @@
     "https://www.google.com/",
     "https://www.amazon.com/",
     "https://www.bing.com/",
-    "https://duckduckgo.com/"
+    "https://duckduckgo.com/",
+    "https://search.yahoo.com/",
+    "https://images.search.yahoo.com/"
   ],
   "modules": ["modules/AdScraper"]
 }

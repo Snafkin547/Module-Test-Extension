@@ -6,7 +6,8 @@
     "js/sites/amazon.js",
     "js/sites/google.js",
     "js/sites/bing.js",
-    "js/sites/duckduckgo.js"
+    "js/sites/duckduckgo.js",
+    "js/sites/yahoo.js"
   ],
   "permissions": [],
   "host_permissions": []
