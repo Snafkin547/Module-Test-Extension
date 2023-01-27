@@ -15,6 +15,7 @@ function bingScraper() {
 function bingScraperHelper() {
   bingAdsWithoutPhoto();
   bingSearchTabAdsWithPhoto();
+  bingSearchTabAboutWithPhoto();
   bingSearchTabCarAdsContainer();
   bingSearchTabCarAdsSlidebar();
   bingImagesTabAdsWithPhoto();
@@ -74,7 +75,7 @@ function bingAdsWithoutPhoto() {
 }
 
 /**
- * Bing search at "search" tab: Scraping ads with images
+ * Bing search at "search" tab: Scraping ads with images (ads)
  */
 function bingSearchTabAdsWithPhoto() {
   if (
@@ -85,7 +86,9 @@ function bingSearchTabAdsWithPhoto() {
   )
     return;
 
-  const adsContainers = document.querySelectorAll("div.adsMvCarousel");
+  const adsContainers = document.querySelectorAll(
+    "div.adsMvCarousel.pa_carousel"
+  );
   for (const adsContainer of adsContainers) {
     const listId = adsContainer.getAttribute("carouselid");
     const itemList = adsContainer.querySelector(
@@ -138,6 +141,80 @@ function bingSearchTabAdsWithPhoto() {
       };
 
       sendMsg(adsItem);
+    }
+  }
+}
+
+/**
+ * Bing search at "search" tab: Scraping ads with images (about)
+ */
+function bingSearchTabAboutWithPhoto() {
+  if (
+    !document
+      .querySelector("header")
+      .querySelector("form")
+      ["action"].includes(".com/search")
+  )
+    return;
+
+  const adsContainers = document.querySelectorAll("div.br-pcContainer");
+  for (const adsContainer of adsContainers) {
+    let itemList = adsContainer.querySelectorAll(".br-gridInterCard");
+    if (itemList.length === 0) {
+      const listId = adsContainer.getAttribute("carouselid");
+      itemList = adsContainer.querySelector(
+        `div#slideexp${listId}.b_slidebar`
+      ).childNodes;
+    }
+    for (const item of itemList) {
+      if (item.classList.contains("see_more")) continue;
+      try {
+        const adsDescription = item.querySelector("div.pcc-ttl").textContent;
+        const supplier = item.querySelector("div.sa_seller").textContent;
+        const productURL = item.querySelector("a")["href"];
+        const currentPrice = Number(
+          item
+            .querySelector("div.sa_price")
+            .textContent.split("$")[1]
+            .replaceAll(/[^0-9^\.]/g, "")
+        );
+        const originalPrice =
+          item.querySelector("div.sa_price").textContent.split("$").length > 2
+            ? Number(
+                item
+                  .querySelector("div.sa_price")
+                  .textContent.split("$")[2]
+                  .replaceAll(/[^0-9^\.]/g, "")
+              )
+            : null;
+        const img = item.querySelector("img");
+        let imgURL = isURL(img["src"]) ? img["src"] : null;
+        let imgBASE64 = isURL(img["src"]) ? null : img["src"];
+
+        listenClickOnAd(item, productURL);
+
+        const adsItem = {
+          content: "records_ads",
+          url: window.location.href,
+          host: window.location.host,
+          pageTitle: document.title,
+          adsDescription,
+          supplier,
+          productURL,
+          currentPrice,
+          originalPrice,
+          imgURL,
+          imgBASE64,
+          imageHeight: img.height,
+          imageWidth: img.width,
+          videoPreview: null,
+          videoURL: null,
+        };
+
+        sendMsg(adsItem);
+      } catch (e) {
+        return;
+      }
     }
   }
 }
