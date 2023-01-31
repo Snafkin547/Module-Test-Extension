@@ -179,7 +179,6 @@ function amazonSearchResultScraper() {
       adsDescription,
       imageHeight: resultImage.height,
       imageWidth: resultImage.width,
-      imageSize: null,
       videoPreview: null,
       videoURL: null,
     };
