@@ -4,10 +4,15 @@ function duckduckgoScraper() {
   if (document.location.host !== "duckduckgo.com") return;
 
   window.onload = function () {
-    ddgAllTabsAdsWithoutPhoto();
-    ddgAllTabsAdsWithPhoto();
-    ddgAllTabsSideAds();
+    duckduckgoScraperHelper();
   };
+}
+
+function duckduckgoScraperHelper() {
+  ddgAllTabsAdsWithoutPhoto();
+  ddgAllTabsAdsWithPhoto();
+  ddgAllTabsSideAds();
+  ddgShoppingTabAds();
 }
 
 /**
@@ -160,5 +165,78 @@ function ddgAllTabsSideAds() {
     };
 
     sendMsg(adsItem);
+  }
+}
+
+/**
+ * DuckDuckGo search at "shopping" tab: Scraping ads
+ */
+function ddgShoppingTabAds() {
+  try {
+    console.log("ddgShoppingTabAds");
+    const itemList = document
+      .querySelector("div.tile-wrap")
+      .querySelectorAll("div.tile--products");
+    console.log(document.querySelector("div.tile-wrap"));
+    console.log(
+      document
+        .querySelector("div.tile-wrap")
+        .querySelectorAll("div.tile--products")
+    );
+
+    for (const item of itemList) {
+      console.log(item);
+      console.log(item.querySelector("h6.tile__title"));
+      console.log(item.querySelector("h6.tile__title").querySelector("a"));
+      console.log(
+        item
+          .querySelector("h6.tile__title")
+          .querySelector("a")
+          .getattribute("title")
+      );
+      const adsDescription = item
+        .querySelector("h6.tile__title")
+        .querySelector("a")
+        .getattribute("title");
+      const supplier = item.querySelector("a.tile--pr__brand").textContent;
+      const productURL = item.querySelector("a")["href"];
+      const currentPriceNode = item
+        .querySelector("div.tile--pr__pricing")
+        .querySelector("span.tile--pr__price");
+      const originalPriceNode = item
+        .querySelector("div.tile--pr__pricing")
+        .querySelector("span.tile--pr__original-price");
+      const imgSrc = item.querySelector("img")["src"];
+      let imgURL = isURL(imgSrc) ? imgSrc : null;
+      let imgBASE64 = isURL(imgSrc) ? null : imgSrc;
+
+      listenClickOnAd(item, productURL);
+
+      const adsItem = {
+        content: "records_ads",
+        url: window.location.href,
+        host: window.location.host,
+        pageTitle: document.title,
+        adsDescription,
+        supplier,
+        productURL,
+        currentPrice: Number(
+          currentPriceNode.textContent.replaceAll(/[^0-9^\.]/g, "")
+        ),
+        originalPrice: originalPriceNode
+          ? Number(originalPriceNode.textContent.replaceAll(/[^0-9^\.]/g, ""))
+          : null,
+        imgURL,
+        imgBASE64,
+        imageHeight: null,
+        imageWidth: null,
+        videoPreview: null,
+        videoURL: null,
+      };
+
+      sendMsg(adsItem);
+    }
+  } catch (error) {
+    return;
   }
 }
