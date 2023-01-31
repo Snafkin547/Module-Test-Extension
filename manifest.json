@@ -30,7 +30,8 @@
     "https://www.bing.com/",
     "https://duckduckgo.com/",
     "https://search.yahoo.com/",
-    "https://images.search.yahoo.com/"
+    "https://images.search.yahoo.com/",
+    "https://www.target.com/"
   ],
   "modules": ["modules/AdScraper"]
 }
