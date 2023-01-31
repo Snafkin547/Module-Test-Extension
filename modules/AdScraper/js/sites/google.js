@@ -280,6 +280,8 @@ function googleShoppingTabAds() {
       const originalPrice =
         prices.length > 2 ? Number(prices[2].replaceAll(",", "")) : null;
       const img = item.querySelector("img");
+      let imgURL = isURL(img["src"]) ? img["src"] : null;
+      let imgBASE64 = isURL(img["src"]) ? null : img["src"];
 
       listenClickOnAd(item, productURL);
 
@@ -293,8 +295,8 @@ function googleShoppingTabAds() {
         productURL,
         currentPrice,
         originalPrice,
-        imgURL: null,
-        imgBASE64: img["src"],
+        imgURL,
+        imgBASE64,
         imageHeight: img.height,
         imageWidth: img.width,
         videoPreview: null,
