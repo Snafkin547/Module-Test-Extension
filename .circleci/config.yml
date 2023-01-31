@@ -21,6 +21,8 @@ jobs:
       - run:
           name: Validate Javascript code
           command: |
+            git submodule init
+            git submodule update
             npm install
             npx eslint js/
             npx eslint modules/
@@ -36,4 +38,7 @@ jobs:
       - store_artifacts:
           path: test-reports/
           destination: javascript_app
+      - store_artifacts:
+          path: /home/circleci/.npm/_logs
+          destination: npm_logs
 
